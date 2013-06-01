@@ -1,0 +1,6 @@
+[submodule "TbdLib"]
+	path = TbdLib
+	url = git@github.com:patgithub/TbdLib
+[submodule "GEx"]
+	path = GEx
+	url = git@github.com:WilstonOreo/GEx
