@@ -22,4 +22,4 @@ project :
 
 # projects to build
 build-project src/dome ;
-
+build-project src/test ;

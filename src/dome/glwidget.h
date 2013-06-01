@@ -26,12 +26,23 @@ protected:
     virtual void paintGL();
 
 private:
-// some stateholders for mouse motion
-// last mouse position in window
-int old_x, old_y;
 // is left mouse button pressed
 bool lbutton;
 float angle;
+  float pointSizeSource;
+
+  float pointSizeGrid;
+  int gridSize;
+  int renderMode;
+
+  // some stateholders for mouse motion
+  // last mouse position in window
+  int old_x, old_y;
+  float yaw, pitch;
+  float lightYaw, lightPitch;
+
+  gex::Point3 lightPos_;
+  bool drawGrid;
 
 
 signals:

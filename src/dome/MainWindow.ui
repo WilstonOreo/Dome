@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>847</width>
-    <height>837</height>
+    <width>907</width>
+    <height>832</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,8 +29,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>847</width>
-     <height>26</height>
+     <width>907</width>
+     <height>25</height>
     </rect>
    </property>
   </widget>
@@ -50,114 +50,37 @@
      <property name="fieldGrowthPolicy">
       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
      </property>
-     <item row="0" column="1">
-      <widget class="QGroupBox" name="groupBox_3">
+     <item row="1" column="1">
+      <widget class="QGroupBox" name="verticalGroupBox">
        <property name="title">
-        <string>Select</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <property name="sizeConstraint">
-         <enum>QLayout::SetDefaultConstraint</enum>
-        </property>
-        <item>
-         <widget class="QPushButton" name="pushLoadConfig">
-          <property name="text">
-           <string>Load Config...</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushLoadFile">
-          <property name="text">
-           <string>Load Model...</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item row="4" column="1">
-      <widget class="QGroupBox" name="groupBox_2">
-       <property name="title">
-        <string>Positions</string>
+        <string>General</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QCheckBox" name="checkLockLight">
+         <widget class="QPushButton" name="pushButton">
           <property name="text">
-           <string>Lock Light</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
+           <string>Generate images</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushLight2Cam">
+         <widget class="QCheckBox" name="checkBox">
           <property name="text">
-           <string>Light = Cam</string>
+           <string>Show settings</string>
           </property>
          </widget>
         </item>
-       </layout>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QGroupBox" name="groupBox">
-       <property name="title">
-        <string>Scene</string>
-       </property>
-       <layout class="QFormLayout" name="formLayout_4">
-        <property name="fieldGrowthPolicy">
-         <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-        </property>
-        <item row="5" column="0">
-         <widget class="QCheckBox" name="checkLight">
+        <item>
+         <widget class="QCheckBox" name="checkBox_2">
           <property name="text">
-           <string>Light</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
+           <string>Show projector images</string>
           </property>
          </widget>
         </item>
-        <item row="6" column="0">
-         <widget class="QCheckBox" name="checkAxis">
+        <item>
+         <widget class="QCheckBox" name="checkBox_3">
           <property name="text">
-           <string>Axis</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="7" column="0">
-         <widget class="QCheckBox" name="checkLabels">
-          <property name="text">
-           <string>Labels</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="8" column="0">
-         <widget class="QCheckBox" name="checkCoords">
-          <property name="text">
-           <string>Coords</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0">
-         <widget class="QCheckBox" name="checkCamera">
-          <property name="text">
-           <string>Camera</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
+           <string>Render with GLSL</string>
           </property>
          </widget>
         </item>
@@ -165,113 +88,192 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QGroupBox" name="groupBox_4">
+      <widget class="QGroupBox" name="verticalGroupBox">
        <property name="title">
-        <string>Slices</string>
+        <string>Dome</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QLabel" name="label_3">
+         <widget class="QLabel" name="label">
           <property name="text">
-           <string>From (mm):</string>
+           <string>Dome Diameter</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QDoubleSpinBox" name="spinShowSlicesFrom">
-          <property name="decimals">
-           <number>2</number>
-          </property>
-          <property name="maximum">
-           <double>999.000000000000000</double>
-          </property>
-          <property name="singleStep">
-           <double>0.100000000000000</double>
-          </property>
-         </widget>
+         <widget class="QDoubleSpinBox" name="doubleSpinBox"/>
         </item>
         <item>
          <widget class="QLabel" name="label_2">
           <property name="text">
-           <string>Height (mm):</string>
+           <string>Base Height</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QDoubleSpinBox" name="spinShowSlicesHeight">
-          <property name="decimals">
-           <number>2</number>
-          </property>
-          <property name="minimum">
-           <double>0.000000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>999.000000000000000</double>
-          </property>
-          <property name="singleStep">
-           <double>0.100000000000000</double>
-          </property>
-          <property name="value">
-           <double>30.000000000000000</double>
-          </property>
-         </widget>
+         <widget class="QDoubleSpinBox" name="doubleSpinBox_2"/>
         </item>
         <item>
-         <widget class="QCheckBox" name="checkSamples">
+         <widget class="QLabel" name="label_3">
           <property name="text">
-           <string>Samples</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
+           <string>Tower Height</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="checkSlices">
-          <property name="text">
-           <string>Slices</string>
-          </property>
-         </widget>
+         <widget class="QDoubleSpinBox" name="doubleSpinBox_3"/>
         </item>
         <item>
-         <widget class="QCheckBox" name="checkRoutes">
+         <widget class="QCheckBox" name="checkBox_4">
           <property name="text">
-           <string>Routes</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="checkOuterPerimeter">
-          <property name="text">
-           <string>Outer Perimeter</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="checkInnerPerimeter">
-          <property name="text">
-           <string>Inner Perimeter</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="checkInfill">
-          <property name="text">
-           <string>Infill</string>
+           <string>Show dome</string>
           </property>
          </widget>
         </item>
        </layout>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="QCheckBox" name="checkObjects">
-       <property name="text">
-        <string>Objects</string>
+     <item row="3" column="1">
+      <widget class="QGroupBox" name="verticalGroupBox">
+       <property name="title">
+        <string>Projector Settings</string>
        </property>
-       <property name="checked">
-        <bool>true</bool>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Wide angle</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QDoubleSpinBox" name="doubleSpinBox_4"/>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>Aspect Ratio</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QDoubleSpinBox" name="doubleSpinBox_5"/>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="checkBox_5">
+          <property name="text">
+           <string>Show Projectors</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="checkBox_6">
+          <property name="text">
+           <string>Show screen points</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="checkBox_7">
+          <property name="text">
+           <string>Show projected points</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QGroupBox" name="gridGroupBox">
+       <property name="title">
+        <string>Projector Settings</string>
        </property>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="1" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QLabel" name="UprightAngleLabel">
+            <property name="text">
+             <string>Upright Angle</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="doubleSpinBox_9"/>
+          </item>
+         </layout>
+        </item>
+        <item row="3" column="0">
+         <widget class="QGroupBox" name="horizontalGroupBox">
+          <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <item>
+            <widget class="QLabel" name="label_7">
+             <property name="text">
+              <string>Offset</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDoubleSpinBox" name="doubleSpinBox_7"/>
+           </item>
+           <item>
+            <widget class="QDoubleSpinBox" name="doubleSpinBox_6"/>
+           </item>
+           <item>
+            <widget class="QDoubleSpinBox" name="doubleSpinBox_8"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QWidget" name="horizontalWidget" native="true">
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QLabel" name="label_6">
+             <property name="text">
+              <string>Projector</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioButton_2">
+             <property name="text">
+              <string>1</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioButton_3">
+             <property name="text">
+              <string>2</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioButton">
+             <property name="text">
+              <string>3</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>Side Angle</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="doubleSpinBox_10"/>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
      </item>
     </layout>
@@ -290,264 +292,7 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections>
-  <connection>
-   <sender>checkLight</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>updateConfig()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>64</x>
-     <y>132</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>423</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkAxis</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>updateConfig()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>60</x>
-     <y>160</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>423</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkCoords</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>updateConfig()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>70</x>
-     <y>188</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>423</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkLabels</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>updateConfig()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>68</x>
-     <y>250</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>423</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkObjects</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>updateConfig()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>72</x>
-     <y>116</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>423</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkLockLight</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>updateConfig()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>84</x>
-     <y>326</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>423</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushLight2Cam</sender>
-   <signal>pressed()</signal>
-   <receiver>glWidget</receiver>
-   <slot>light2cam()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>84</x>
-     <y>357</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>408</x>
-     <y>303</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushLoadFile</sender>
-   <signal>pressed()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>updateConfig()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>89</x>
-     <y>96</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>423</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushLoadConfig</sender>
-   <signal>pressed()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>updateConfig()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>108</x>
-     <y>96</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>423</x>
-     <y>332</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkSlices</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>updateConfig()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>64</x>
-     <y>255</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>423</x>
-     <y>312</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkSamples</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>updateConfig()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>72</x>
-     <y>234</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>423</x>
-     <y>332</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkRoutes</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>updateConfig()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>66</x>
-     <y>299</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>423</x>
-     <y>332</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkCamera</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>updateConfig()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>72</x>
-     <y>104</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>423</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkOuterPerimeter</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>updateConfig()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>119</x>
-     <y>403</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>423</x>
-     <y>335</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkInnerPerimeter</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>updateConfig()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>119</x>
-     <y>432</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>423</x>
-     <y>335</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkInfill</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>updateConfig()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>119</x>
-     <y>461</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>423</x>
-     <y>335</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
  <slots>
   <slot>updateConfig()</slot>
  </slots>
