@@ -11,18 +11,18 @@ import numpy, math
 
 from Base import *
 from util import *
-
 from MyGeom import *
 
 
 class Projector(SceneObject):
-  def __init__(self,yawAngle,pitchAngle,fov = 120,aspectRatio = 0.75,offset = Point3D(),patchResolution = 8):
+  def __init__(self,yawAngle,pitchAngle,fov = 120,aspectRatio = 0.75,offset = Point3D(),towerHeight = 2.3,patchResolution = 8):
     SceneObject.__init__(self,Point3D(),GL_FLAT,False)
     self.yawAngle = yawAngle
     self.pitchAngle = pitchAngle
     self.patchResolution = patchResolution
     self.aspectRatio = aspectRatio
     self.fov = fov
+    self.towerHeight = towerHeight
     self.offset = offset
     self.drawGrid = True
     self.drawRays = True
@@ -33,13 +33,10 @@ class Projector(SceneObject):
     glPushMatrix()
     glTranslatef(0,0,-dome.radius)
     length = dome.radius
-    posRadius = math.sqrt(dome.radius**2 - (dome.radius - dome.baseHeight)**2)
     theta = math.radians(self.yawAngle)
-    self.position = self.offset + getPosition(posRadius,(dome.radius - dome.baseHeight),self.yawAngle)
-    #self.position = self.offset + Point3D(math.cos(theta)*dome.radius,math.sin(theta)*dome.radius,0) 
+    posRadius = dome.innerRadius + self.offset.y()
+    self.position = getPosition(self.offset.x(),0,self.yawAngle - 90.0) + getPosition(posRadius,(dome.radius - self.towerHeight),self.yawAngle)
     self.__genBorderPoints(self.position,length)
-   # self.beginDraw()
-    #glPushMatrix()
 
     if self.drawGrid: self.__drawGrid(length,color)
     if self.drawFrustum: self.__drawFrustum(length,color)
@@ -47,7 +44,6 @@ class Projector(SceneObject):
     if self.drawProjPoints: self.__drawProjPoints(dome,color)
    
     glPopMatrix()
-    #self.endDraw()
 
   def __genBorderPoints(self,pos,length):
     def rotMat():
@@ -125,7 +121,7 @@ class Projector(SceneObject):
     glColor3f(color[0],color[1],color[2])
     inc = 1 / float(self.patchResolution)
     o = self.position
-    p = dome.position 
+    p = Point3D(dome.position.x(),dome.position.y(),dome.position.z() - dome.baseOffset) 
     glPointSize(3.0)
     glBegin(GL_POINTS)
     glVertex3fv(o.get())
@@ -143,11 +139,13 @@ class Projector(SceneObject):
 
 
 class Dome(SceneObject):
-  def __init__(self,radius,baseHeight,position):
+  def __init__(self,radius,baseHeight,position,baseOffset = 0.0,towerHeight = 2.3,innerRadius = 6.0):
     SceneObject.__init__(self,position,GL_SMOOTH,True)
     self.radius = radius
     self.baseHeight = baseHeight
-    self.towerHeight = 1.0
+    self.baseOffset = baseOffset
+    self.towerHeight = towerHeight
+    self.innerRadius = innerRadius
     self.position = position
     self.sphere = gluNewQuadric()
     gluQuadricTexture(self.sphere, GL_TRUE);
@@ -166,7 +164,7 @@ class Dome(SceneObject):
 
     glPushMatrix()
     glColor(1.0,1.0,1.0,0.5)
-    glTranslatef(0,0,- self.radius)
+    glTranslatef(0,0,- self.radius - self.baseOffset)
     gluQuadricDrawStyle(self.sphere, mode)
     gluSphere(self.sphere, self.radius, 64, 64)
     glPopMatrix()

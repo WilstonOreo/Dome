@@ -67,15 +67,16 @@ class GLWidget(QGLWidget):
           shader.use()
           glActiveTexture(GL_TEXTURE0); # use first texturing unit
           shader.set(proj_texture = ("1i",[0]),
-              dome_base_height = ("1f",[self.dome.baseHeight]),
+              dome_base_offset = ("1f",[self.dome.baseOffset]),
+              dome_inner_radius = ("1f",[self.dome.innerRadius]),
               dome_radius = ("1f",[self.dome.radius]),
-              dome_position = ("3f",[self.dome.position.get()]),
+              proj_tower_height = ("1f",[proj.towerHeight]),
               proj_yaw = ("1f",[proj.yawAngle]),
               proj_pitch = ("1f",[proj.pitchAngle]),
-              proj_offset = ("3f",[proj.offset.get()]),
+              proj_offset = ("2f",[[proj.offset.x(),proj.offset.y()]]),
               proj_aspect_ratio = ("1f",[proj.aspectRatio]),
-              alpha_value = ("1f",[alpha]),
-              proj_fov = ("1f",[proj.fov]))
+              proj_fov = ("1f",[proj.fov]),
+              alpha_value = ("1f",[alpha]))
 
           self.textures[self.selTexture].setup()
           
@@ -199,12 +200,17 @@ class GLWidget(QGLWidget):
       self.dome.radius = value / 2.0
       self.update()
     
+    def setDomeInnerDiameter(self, value):
+      self.dome.innerRadius = value / 2.0
+      self.update()
+    
     def setBaseHeight(self, value):
       self.dome.baseHeight = value
       self.update()
 
     def setTowerHeight(self, value):
-      self.dome.towerHeight = value
+      for proj in self.projectors:
+        proj.towerHeight = value
       self.update()
 
     def setShowDome(self, value):
@@ -223,6 +229,10 @@ class GLWidget(QGLWidget):
 
     def setShowProjectors(self, value):
       self.showProjectors = value
+      self.update()
+    
+    def setBaseOffset(self, value):
+      self.dome.baseOffset = value
       self.update()
 
     def setProjImagesFullscreen(self,value):

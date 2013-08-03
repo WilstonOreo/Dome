@@ -54,21 +54,19 @@ class DomeGUI(QtGui.QMainWindow):
     self.boxPitchOffset.setDisabled(allSelected)
     self.boxOffsetX.setDisabled(allSelected)
     self.boxOffsetY.setDisabled(allSelected)
-    self.boxOffsetZ.setDisabled(allSelected)
 
     if not allSelected:
       proj = self.glWidget.projectors[projId]
       objects = [self.boxYawOffset,
           self.boxPitchOffset,
           self.boxOffsetX,
-          self.boxOffsetY,
-          self.boxOffsetZ]
+          self.boxOffsetY]
+
       disconnect(objects)
       self.boxYawOffset.setValue(self.glWidget.yawOffsets[projId])
       self.boxPitchOffset.setValue(self.glWidget.pitchOffsets[projId])
       self.boxOffsetX.setValue(proj.offset.x())
       self.boxOffsetY.setValue(proj.offset.y())
-      self.boxOffsetZ.setValue(proj.offset.z())
       connect(objects)
 
     self.glWidget.update()
@@ -82,8 +80,7 @@ class DomeGUI(QtGui.QMainWindow):
       self.glWidget.pitchOffsets[projId] = self.boxPitchOffset.value()
       proj.offset = Vector3D(
           self.boxOffsetX.value(),
-          self.boxOffsetY.value(),
-          self.boxOffsetZ.value())
+          self.boxOffsetY.value(),0.0)
       proj.yawAngle = self.boxYawAngle.value() + projId*120 + self.glWidget.yawOffsets[projId] 
       proj.pitchAngle = self.boxPitchAngle.value() + self.glWidget.pitchOffsets[projId]
 

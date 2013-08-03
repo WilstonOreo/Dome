@@ -2,16 +2,17 @@
 uniform sampler2D proj_texture;
 
 /// Dome parameters
-uniform float dome_base_height;
+uniform float dome_base_offset;
 uniform float dome_radius;
-uniform vec3 dome_position;
+uniform float dome_inner_radius;
 
 /// Projector settings
-/// Note: Projector position is calculated from dome_radius, 
-///       dome_base_height, proj_yaw and proj_offset
+/// Note: Projector position is calculated from dome_inner_radius, 
+///       proj_yaw and proj_offset
 uniform float proj_yaw;
 uniform float proj_pitch;
-uniform vec3 proj_offset; 
+uniform float proj_tower_height;
+uniform vec2 proj_offset; 
 
 uniform float proj_fov; // 120.0 is default
 uniform float proj_aspect_ratio; // 0.75 is default
@@ -68,14 +69,16 @@ mat3 rotateAroundZ( in float angle )
               0.0,0.0,1.0);
 }
 
-
-/// Compute projector position based in dome_base_height, dome_radius and proj_yaw
+/// Compute projector position based in dome_inner_radius and proj_yaw
 vec3 calcProjPosition()
 {
   float theta = deg2rad(proj_yaw);
-  float radius = sqrt(sqr(dome_radius) - sqr(dome_radius - dome_base_height));
-  float height = dome_radius - dome_base_height;
-  return proj_offset + vec3(cos(theta)*radius,sin(theta)*radius,height);
+  float ct = cos(theta), st = sin(theta);
+  float radius = dome_inner_radius + proj_offset.y;
+  float height = dome_radius - proj_tower_height;
+  return  
+    vec3(-st*proj_offset.x,ct*proj_offset.x,0.0) + 
+    vec3(ct*radius,st*radius,height);
 }
 
 /// Calculate rotation by given yaw and pitch angles (in degrees!)
@@ -127,6 +130,8 @@ float sphereIntersection(in vec3 rayorg, in vec3 raydir, in vec3 center, in floa
   if (q == 0.0) return -1.0;
 
   float t = c / q;
+  if (t < 0.0) 
+    t = q / a;
   if (t < radius / 1000.0) return -1.0;
 
   iPoint = rayorg + t * raydir;
@@ -149,6 +154,8 @@ vec2 transformToDome(in vec2 texCoord)
   vec3 proj_pos = calcProjPosition();
   vec3 iPoint;
   vec3 rayorg = vec3(proj_pos.x,-proj_pos.y,-proj_pos.z);
+
+  vec3 dome_position = vec3(0.0,0.0,dome_base_offset);
 
   float theta = deg2rad(proj_yaw);
   float intersection = sphereIntersection(rayorg,raydir,dome_position,dome_radius*1.001,iPoint);
