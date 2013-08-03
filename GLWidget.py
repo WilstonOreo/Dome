@@ -57,7 +57,11 @@ class GLWidget(QGLWidget):
         self.selTexture = "(none)"
 
     def paintGL(self): 
-      def paintProjectorImage(proj,offset,size,alpha):
+      def paintProjectorImage(projId,offset,size,alpha):
+
+        proj = self.projectors[projId]
+        leftProj = self.projectors[(projId-1) % 3]
+        rightProj = self.projectors[(projId+1) % 3]
 
         glColor(1.0,1.0,1.0,alpha)
         ar = 1.0 / proj.aspectRatio 
@@ -76,11 +80,18 @@ class GLWidget(QGLWidget):
               proj_offset = ("2f",[[proj.offset.x(),proj.offset.y()]]),
               proj_aspect_ratio = ("1f",[proj.aspectRatio]),
               proj_fov = ("1f",[proj.fov]),
+              left_proj_yaw = ("1f",[leftProj.yawAngle]),
+              left_proj_pitch = ("1f",[leftProj.pitchAngle]),
+              left_proj_tower_height = ("1f",[leftProj.towerHeight]),
+              left_proj_offset = ("2f",[[leftProj.offset.x(),leftProj.offset.y()]]), 
+              right_proj_yaw = ("1f",[rightProj.yawAngle]),
+              right_proj_pitch = ("1f",[rightProj.pitchAngle]),
+              right_proj_tower_height = ("1f",[rightProj.towerHeight]),
+              right_proj_offset = ("2f",[[rightProj.offset.x(),rightProj.offset.y()]]), 
               alpha_value = ("1f",[alpha]))
 
           self.textures[self.selTexture].setup()
           
-
         glBegin( GL_QUADS )
         glTexCoord2f(0.0, 0.0); glVertex2fv(offset)
         glTexCoord2f(1.0, 0.0); glVertex2f(offset[0]+ar*size,offset[1]) 
@@ -103,14 +114,14 @@ class GLWidget(QGLWidget):
         glDisable( GL_DEPTH_TEST )
         glDisable( GL_CULL_FACE ) 
         if self.projImagesFullscreen and self.selectedProj != -1:
-          paintProjectorImage(self.projectors[self.selectedProj],[0.0,0.0],1.0,0.5)
+          paintProjectorImage(self.selectedProj,[0.0,0.0],1.0,0.5)
         else:
           bottom = 0.05
           size = 0.2
           xOffset = 0.05
-          for proj in self.projectors:
-            paintProjectorImage(proj,[xOffset,bottom],size,1.0)
-            xOffset += size / proj.aspectRatio + 0.05
+          for projId in range(0,3):
+            paintProjectorImage(projId,[xOffset,bottom],size,1.0)
+            xOffset += size / self.projectors[projId].aspectRatio + 0.05
 
       def drawProjectors():
         idx = 0

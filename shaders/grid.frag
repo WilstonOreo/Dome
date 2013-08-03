@@ -6,8 +6,10 @@ uniform float line_thickness;
 vec3 grid(in vec2 texCoords)
 {
   vec2 off = num_lines * (texCoords - offset) + vec2(0.0,clock);
-  if ((off.x <= line_thickness*num_lines.x && off.x >= 0.0) || 
-      (off.y <= line_thickness*num_lines.y && off.y >= 0.0) return vec3(1.0,1.0,1.0);
+  off = vec2(fract(off.x),fract(off.y));
+  
+  if (off.y <= line_thickness && off.y >= 0.0 && num_lines.y > 0.0) return vec3(1.0,1.0,1.0);
+  if (off.x <= line_thickness && off.x >= 0.0 && num_lines.x > 0.0) return vec3(0.0,0.0,1.0);
   return vec3(0.0,0.0,0.0);
 }
 
@@ -23,3 +25,4 @@ void main()
 
   gl_FragColor.a = 1.0;
 }
+
