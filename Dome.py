@@ -137,6 +137,7 @@ class Projector(SceneObject):
     q = (-b - distSqrt)*0.5 if b < 0 else (-b + distSqrt)*0.5
     if q == 0: return None
     t = c / q
+    if t < 0.0: t = q / a;
     if t < near: return None
     return org + Vector3D(t*d.x(),t*d.y(),t*d.z())
 

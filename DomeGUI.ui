@@ -10,8 +10,11 @@
     <height>908</height>
    </rect>
   </property>
+  <property name="acceptDrops">
+   <bool>false</bool>
+  </property>
   <property name="windowTitle">
-   <string>Dome</string>
+   <string>Dome Simulator</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
