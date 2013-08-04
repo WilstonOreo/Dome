@@ -1,5 +1,28 @@
 #!/usr/bin/env python
 #
+"""
+    This file is part of DomeSimulator.
+
+    DomeSimulator is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DomeSimulator is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with DomeSimulator.  If not, see <http://www.gnu.org/licenses/>.
+
+    DomeSimulator is free for non-commercial use. If you want to use it 
+    commercially, you should contact the author 
+    Michael Winkelmann aka Wilston Oreo by mail:
+    me@wilstonoreo.net
+"""
+
+
 from __future__ import print_function
 
 from SceneObject import SceneObject
@@ -15,7 +38,7 @@ from MyGeom import *
 
 
 class Projector(SceneObject):
-  def __init__(self,yawAngle,pitchAngle,fov = 120,aspectRatio = 0.75,offset = Point3D(),towerHeight = 2.3,patchResolution = 8):
+  def __init__(self,yawAngle,pitchAngle,fov = 68.2,aspectRatio = 0.75,offset = Point3D(),towerHeight = 2.3,patchResolution = 8):
     SceneObject.__init__(self,Point3D(),GL_FLAT,False)
     self.yawAngle = yawAngle
     self.pitchAngle = pitchAngle

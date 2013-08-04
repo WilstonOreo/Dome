@@ -1,3 +1,29 @@
+#!/usr/bin/env python
+#
+"""
+    This file is part of DomeSimulator.
+
+    DomeSimulator is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DomeSimulator is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with DomeSimulator.  If not, see <http://www.gnu.org/licenses/>.
+
+    DomeSimulator is free for non-commercial use. If you want to use it 
+    commercially, you should contact the author 
+    Michael Winkelmann aka Wilston Oreo by mail:
+    me@wilstonoreo.net
+"""
+
+from __future__ import print_function
+
 from Camera import Camera
 from MyGeom import Point3D, Vector3D, Matrix4x4
 
@@ -31,9 +57,9 @@ class GLWidget(QGLWidget):
         self.selectedProj = -1
         self.dome = Dome.Dome(7.5,3.5,Point3D())
         self.projectors = [
-          Dome.Projector(0,50),
-          Dome.Projector(120,50),
-          Dome.Projector(240,50)]
+          Dome.Projector(0,38),
+          Dome.Projector(120,38),
+          Dome.Projector(240,38)]
 
         self.showProjectorImages = True
         self.showProjectors = True
@@ -57,17 +83,13 @@ class GLWidget(QGLWidget):
         self.selTexture = "(none)"
 
     def paintGL(self): 
-      def paintProjectorImage(projId,offset,size,alpha):
-
-        proj = self.projectors[projId]
-        leftProj = self.projectors[(projId-1) % 3]
-        rightProj = self.projectors[(projId+1) % 3]
+      def paintProjectorImage(proj,offset,size,alpha):
 
         glColor(1.0,1.0,1.0,alpha)
         ar = 1.0 / proj.aspectRatio 
  
         if self.selTexture in self.textures:
-          shader = self.shaders["dome_proj"]
+          shader = self.shaders["proj"]
           shader.use()
           glActiveTexture(GL_TEXTURE0); # use first texturing unit
           shader.set(proj_texture = ("1i",[0]),
@@ -80,18 +102,11 @@ class GLWidget(QGLWidget):
               proj_offset = ("2f",[[proj.offset.x(),proj.offset.y()]]),
               proj_aspect_ratio = ("1f",[proj.aspectRatio]),
               proj_fov = ("1f",[proj.fov]),
-              left_proj_yaw = ("1f",[leftProj.yawAngle]),
-              left_proj_pitch = ("1f",[leftProj.pitchAngle]),
-              left_proj_tower_height = ("1f",[leftProj.towerHeight]),
-              left_proj_offset = ("2f",[[leftProj.offset.x(),leftProj.offset.y()]]), 
-              right_proj_yaw = ("1f",[rightProj.yawAngle]),
-              right_proj_pitch = ("1f",[rightProj.pitchAngle]),
-              right_proj_tower_height = ("1f",[rightProj.towerHeight]),
-              right_proj_offset = ("2f",[[rightProj.offset.x(),rightProj.offset.y()]]), 
               alpha_value = ("1f",[alpha]))
 
           self.textures[self.selTexture].setup()
           
+
         glBegin( GL_QUADS )
         glTexCoord2f(0.0, 0.0); glVertex2fv(offset)
         glTexCoord2f(1.0, 0.0); glVertex2f(offset[0]+ar*size,offset[1]) 
@@ -114,14 +129,14 @@ class GLWidget(QGLWidget):
         glDisable( GL_DEPTH_TEST )
         glDisable( GL_CULL_FACE ) 
         if self.projImagesFullscreen and self.selectedProj != -1:
-          paintProjectorImage(self.selectedProj,[0.0,0.0],1.0,0.5)
+          paintProjectorImage(self.projectors[self.selectedProj],[0.0,0.0],1.0,0.5)
         else:
           bottom = 0.05
           size = 0.2
           xOffset = 0.05
-          for projId in range(0,3):
-            paintProjectorImage(projId,[xOffset,bottom],size,1.0)
-            xOffset += size / self.projectors[projId].aspectRatio + 0.05
+          for proj in self.projectors:
+            paintProjectorImage(proj,[xOffset,bottom],size,1.0)
+            xOffset += size / proj.aspectRatio + 0.05
 
       def drawProjectors():
         idx = 0
@@ -175,7 +190,8 @@ class GLWidget(QGLWidget):
       glClearColor(0.0, 0.0, 0.0, 1.0)
       glClearDepth(1.0)
  
-      self.shaders["dome_proj"] = Shader("shaders/proj.vert","shaders/proj.frag") 
+      self.shaders["proj"] = Shader("shaders/proj.vert","shaders/proj.frag") 
+      self.shaders["edgeblend"] = Shader("shaders/edgeblend.vert","shaders/edgeblend.frag") 
       #sys.exit(0)
       
       for textureFile in self.textureFiles:
