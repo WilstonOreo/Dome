@@ -47,10 +47,11 @@ class Projector(SceneObject):
     self.fov = fov
     self.towerHeight = towerHeight
     self.offset = offset
-    self.drawGrid = True
-    self.drawRays = True
+    self.drawGrid = False
+    self.drawRays = False
     self.drawFrustum = True
-    self.drawProjPoints = True
+    self.drawProjPoints = False
+    self.drawProjections = True
 
   def draw(self,dome,color):
     glPushMatrix()
@@ -175,7 +176,9 @@ class Dome(SceneObject):
     gluQuadricTexture(self.sphere, GL_TRUE);
     gluQuadricNormals(self.sphere, GLU_SMOOTH);
 
-  def draw(self,mode = GLU_LINE):
+  def draw(self,mode,texture,shader,projectors,selectedProj):
+    def v(enabled):
+      return 1.0 if enabled else 0.0
     self.beginDraw()
 
     glEnable(GL_LIGHTING)
@@ -186,6 +189,46 @@ class Dome(SceneObject):
     glutSolidCylinder(self.radius,self.baseHeight,64,4)
     glPopMatrix()
 
+  #  if texture is not None:
+  #    texture.setup()
+
+    if len(projectors) == 3:
+      shader.use()
+      proj_a = projectors[0]
+      proj_b = projectors[1]
+      proj_c = projectors[2]
+
+      projMulti = [v(proj_a.drawProjections),
+          v(proj_b.drawProjections),
+          v(proj_c.drawProjections),1.0]
+      if selectedProj != -1:
+        projMulti = [0.0,0.0,0.0,1.0]
+        projMulti[selectedProj] = 1.0;
+
+      if texture is None:
+        projMulti[3] = 0.0
+
+      shader.set(
+          proj_texture = ("1i",[0]),
+          dome_base_offset = ("1f",[self.baseOffset]),
+          dome_inner_radius = ("1f",[self.innerRadius]),
+          dome_radius = ("1f",[self.radius]),
+          proj_aspect_ratio = ("1f",[proj_a.aspectRatio]),
+          proj_fov = ("1f",[proj_a.fov]),
+          proj_a_tower_height = ("1f",[proj_a.towerHeight]),
+          proj_a_yaw = ("1f",[proj_a.yawAngle]),
+          proj_a_pitch = ("1f",[proj_a.pitchAngle]),
+          proj_a_offset = ("2f",[[proj_a.offset.x(),proj_a.offset.y()]]),
+          proj_b_tower_height = ("1f",[proj_b.towerHeight]),
+          proj_b_yaw = ("1f",[proj_b.yawAngle]),
+          proj_b_pitch = ("1f",[proj_b.pitchAngle]),
+          proj_b_offset = ("2f",[[proj_b.offset.x(),proj_b.offset.y()]]),
+          proj_c_tower_height = ("1f",[proj_c.towerHeight]),
+          proj_c_yaw = ("1f",[proj_c.yawAngle]),
+          proj_c_pitch = ("1f",[proj_c.pitchAngle]),
+          proj_c_offset = ("2f",[[proj_c.offset.x(),proj_c.offset.y()]]),
+          proj_multi = ("4f",[projMulti]))
+
     glPushMatrix()
     glColor(1.0,1.0,1.0,0.5)
     glTranslatef(0,0,- self.radius - self.baseOffset)
@@ -193,6 +236,8 @@ class Dome(SceneObject):
     gluSphere(self.sphere, self.radius, 64, 64)
     glPopMatrix()
 
+    if len(projectors) == 3: 
+      shader.unuse()
     glDisable(GL_TEXTURE_2D)
 
     self.endDraw()

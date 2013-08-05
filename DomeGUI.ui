@@ -288,7 +288,7 @@
                <string>Rays</string>
               </property>
               <property name="checked">
-               <bool>true</bool>
+               <bool>false</bool>
               </property>
              </widget>
             </item>
@@ -298,7 +298,7 @@
                <string>Grid</string>
               </property>
               <property name="checked">
-               <bool>true</bool>
+               <bool>false</bool>
               </property>
              </widget>
             </item>
@@ -316,6 +316,16 @@
              <widget class="QCheckBox" name="chkProjPoints">
               <property name="text">
                <string>Proj. Points</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QCheckBox" name="chkHighlightProjections">
+              <property name="text">
+               <string>Highlight Projections</string>
               </property>
               <property name="checked">
                <bool>true</bool>
@@ -1108,6 +1118,22 @@
     <hint type="destinationlabel">
      <x>649</x>
      <y>461</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chkHighlightProjections</sender>
+   <signal>clicked()</signal>
+   <receiver>DomeGUI</receiver>
+   <slot>setProjectorSettings()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>238</x>
+     <y>599</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>437</x>
+     <y>453</y>
     </hint>
    </hints>
   </connection>

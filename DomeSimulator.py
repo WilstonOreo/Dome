@@ -112,6 +112,7 @@ class DomeGUI(QtGui.QMainWindow):
       proj.drawFrustum = self.chkFrustum.isChecked()
       proj.drawRays = self.chkRays.isChecked()
       proj.drawGrid = self.chkGrid.isChecked()
+      proj.drawProjections = self.chkHighlightProjections.isChecked()
       proj.drawProjPoints = self.chkProjPoints.isChecked()
 
     self.glWidget.update()

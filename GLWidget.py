@@ -106,7 +106,6 @@ class GLWidget(QGLWidget):
 
           self.textures[self.selTexture].setup()
           
-
         glBegin( GL_QUADS )
         glTexCoord2f(0.0, 0.0); glVertex2fv(offset)
         glTexCoord2f(1.0, 0.0); glVertex2f(offset[0]+ar*size,offset[1]) 
@@ -165,17 +164,16 @@ class GLWidget(QGLWidget):
 
       glRotatef(90,1,0,0)
       glTranslatef(0,0,self.dome.baseHeight + self.dome.towerHeight)
-
-      mode = GLU_LINE
-      if self.selTexture in self.textures:
-        mode = GLU_FILL
-        self.textures[self.selTexture].setup()
       
       if self.showProjectors:
         drawProjectors()
-      
-      if self.showDome: self.dome.draw(mode)
-
+ 
+      if self.showDome: 
+        mode = GLU_FILL
+        texture = None
+        if self.selTexture in self.textures:
+          texture = self.textures[self.selTexture]
+        self.dome.draw(mode,texture,self.shaders["inv_proj"],self.projectors,self.selectedProj)
 
       if self.showProjectorImages:
         drawProjectorImages()
@@ -192,6 +190,7 @@ class GLWidget(QGLWidget):
  
       self.shaders["proj"] = Shader("shaders/proj.vert","shaders/proj.frag") 
       self.shaders["edgeblend"] = Shader("shaders/edgeblend.vert","shaders/edgeblend.frag") 
+      self.shaders["inv_proj"] = Shader("shaders/inv_proj.vert","shaders/inv_proj.frag") 
       #sys.exit(0)
       
       for textureFile in self.textureFiles:

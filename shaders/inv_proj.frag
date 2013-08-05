@@ -20,56 +20,44 @@
     me@wilstonoreo.net
 **************************************************************************/
 
+/// Our texture
+uniform sampler2D proj_texture;
+
 /// Dome parameters
 uniform float dome_base_offset;
 uniform float dome_radius;
 uniform float dome_inner_radius;
 
-/// Projector settings
-/// Note: Projector position is calculated from dome_inner_radius, 
-///       proj_yaw and proj_offset
-uniform float proj_yaw;
-uniform float proj_pitch;
-uniform float proj_tower_height;
-uniform vec2 proj_offset; 
-
+/// Must be the same for all projectors
 uniform float proj_fov; // 120.0 is default
 uniform float proj_aspect_ratio; // 0.75 is default
 
-/// Settings from left and right projector (required for edge blending)
-uniform float overlap_proj_yaw;
-uniform float overlap_proj_pitch;
-uniform float overlap_proj_tower_height;
-uniform vec2 overlap_proj_offset; 
+/// Projector settings
+/// Note: Projector position is calculated from dome_inner_radius, 
+///       proj_yaw and proj_offset
+uniform float proj_a_yaw;
+uniform float proj_a_pitch;
+uniform float proj_a_tower_height;
+uniform vec2 proj_a_offset; 
 
-uniform float edge_blur; // 0.05
+uniform float proj_b_yaw;
+uniform float proj_b_pitch;
+uniform float proj_b_tower_height;
+uniform vec2 proj_b_offset; 
+
+uniform float proj_c_yaw;
+uniform float proj_c_pitch;
+uniform float proj_c_tower_height;
+uniform vec2 proj_c_offset; 
+
+uniform vec4 proj_multi;
 
 const float PI = 3.14159265358979323846264;
-
-vec3 interpolate(in float t, in vec3 a, in vec3 b)
-{
-  return a + t * (b - a);
-}
 
 /// Convert degrees to radians
 float deg2rad(in float deg)
 {
   return deg * PI / 180.0;
-}
-
-float sqr(in float a)
-{
-  return a*a;
-}
-
-/// Calculates the rotation matrix of a rotation around X axis with an angle in radians
-mat3 rotateAroundX( in float angle )
-{
-  float s = sin(angle);
-  float c = cos(angle);
-  return mat3(1.0,0.0,0.0,
-              0.0,  c, -s,
-              0.0,  s,  c);
 }
 
 /// Calculates the rotation matrix of a rotation around Y axis with an angle in radians
@@ -92,20 +80,15 @@ mat3 rotateAroundZ( in float angle )
               0.0,0.0,1.0);
 }
 
-/// Compute projector position based in dome_inner_radius and
-/// proj_yaw, proj_offset and proj_tower_height
-vec3 calcProjPosition(
-  in float yaw, // projector's yaw angle 
-  in vec2 offset, // projector's xy offset vector
-  in float tower_height // projector's tower height (Z offset)
-  )
+/// Compute projector position based in dome_inner_radius and proj_yaw
+vec3 calcProjPosition(in float yaw, in float tower_height, in vec2 offset)
 {
   float theta = deg2rad(yaw);
   float ct = cos(theta), st = sin(theta);
   float radius = dome_inner_radius + offset.y;
   float height = dome_radius - tower_height;
-  return
-    vec3(1.0,-1.0,-1.0) * (
+  return  
+    vec3(1.0,-1.0,-1.0) * (  
     vec3(-st*offset.x,ct*offset.x,0.0) + 
     vec3(ct*radius,st*radius,height));
 }
@@ -133,6 +116,7 @@ void projFrustum(
   bottom_left = proj_matrix * vec3(1.0,-width,-height);
   bottom_right = proj_matrix * vec3(1.0,width,-height);
 }
+
 
 void projCoordinateSystem(
   in mat3 proj_matrix, // projection matrix 
@@ -176,101 +160,63 @@ float frustumIntersection(
   return min(min(d_top,d_bottom),min(d_left,d_right));
 }
 
-/// Calculate point on projector screen by given screen coordinates
-vec3 pointOnScreen(in vec2 screenCoord)
+float projIntersection(in vec3 point, 
+  in float yaw, 
+  in float pitch, 
+  in float tower_height, 
+  in vec2 offset)
 {
-  float a = proj_fov / 2.0;
-  float width = tan(deg2rad(a));
-  float height = width * proj_aspect_ratio;
+  vec3 proj_pos = calcProjPosition(yaw,tower_height,offset);
+  mat3 proj_matrix = projMatrix(yaw,pitch);
 
-  mat3 M = projMatrix(proj_yaw,proj_pitch);
-  vec3 top_left, top_right, bottom_left, bottom_right;
-  projFrustum(M,
-    top_left,
-    top_right,
-    bottom_left,
-    bottom_right);
-  return interpolate(screenCoord.y,
-                     interpolate(screenCoord.x,top_left,top_right),
-                     interpolate(screenCoord.x,bottom_left,bottom_right));
+  float d_frustum = frustumIntersection(point,proj_pos,proj_matrix);
+  
+  return (d_frustum >= 0.0) ? 1.0 : 0.0;
+/*
+  float d = - d_frustum / 0.05;
+  return  min(max(d,0.0),1.0);*/
 }
 
-/// Return 1.0 if ray intersects sphere, otherwise -1.0
-float sphereIntersection(in vec3 rayorg, in vec3 raydir, in vec3 center, in float radius, out vec3 iPoint)
+vec3 pointOnSphere(in vec2 texCoord)
 {
-  vec3 o = rayorg - center;
-  float a = dot(raydir,raydir);
-  float b = 2.0 * dot(raydir,o);
-  float c = dot(o,o) - radius * radius;
+  float r = dome_radius, 
+    theta = (texCoord.t) * PI,
+    phi = (texCoord.s - 0.5)* 2.0 * PI;
 
-  float disc = b*b - 4.0 * a * c;
-  if (disc < 0.0) return -1.0;
-
-  float distSqrt = sqrt(disc);
-  float q;
-  if (b < 0.0)
-  {
-    q = (-b - distSqrt)*0.5;
-  }
-  else
-  {
-    q = (-b + distSqrt)*0.5;
-  }
-  if (q == 0.0) return -1.0;
-
-  float t = c / q;
-  if (t < 0.0) 
-    t = q / a;
-  if (t < radius / 1000.0) return -1.0;
-
-  iPoint = rayorg + t * raydir;
-  return 1.0;
+  return vec3(
+    r * sin(theta) * sin(phi), 
+    r * sin(theta) * cos(phi), 
+    r * cos(theta) + dome_base_offset);
 }
 
-
-/// Edge blend if theres is a frustum intersection
-float edgeblend(
-  in vec3 iPoint,
-  float yaw, float pitch,
-  float tower_height, vec2 offset)
-{
-  mat3 M = projMatrix(yaw,pitch);
-  vec3 proj_pos = calcProjPosition(yaw,offset,tower_height);  
-  return frustumIntersection(iPoint,proj_pos,M);
-}
-
-/// Calculate intersection point between projector screen ray and dome
-float getIntersectionPoint(in vec2 texCoord, out vec3 iPoint)
-{
-  vec3 raydir = pointOnScreen(texCoord);
-  vec3 proj_pos = calcProjPosition(proj_yaw,proj_offset,proj_tower_height);
-
-  vec3 dome_position = vec3(0.0,0.0,dome_base_offset);
-
-  float theta = deg2rad(proj_yaw);
-  return sphereIntersection(proj_pos,raydir,dome_position,dome_radius,iPoint);
-}
 
 void main()
 {
-  vec3 iPoint;
-  float intersection = getIntersectionPoint(gl_TexCoord[0].st,iPoint);
+  //gl_FragColor = vec4(0.0,0.0,0.0,0.0);
 
-  if (intersection < 0.0)
+  if (proj_multi.w > 0.0)
   {
-    gl_FragColor = vec4(0.0,0.0,0.0,1.0);
-    return;
+    gl_FragColor = texture2D(proj_texture,gl_TexCoord[0].st);
+    gl_FragColor.a = 0.5;
+  } else
+  {
+    gl_FragColor = vec4(0.0,0.0,0.0,0.5);
   }
-
-  gl_FragColor = vec4(1.0,1.0,1.0,1.0);
-  float edgeblend = edgeblend(iPoint,
-    overlap_proj_yaw,
-    overlap_proj_pitch,
-    overlap_proj_tower_height,
-    overlap_proj_offset);
-  float le = -edgeblend / edge_blur;
-  gl_FragColor *= max(min(le,1.0),0.0);
-
-  gl_FragColor.a = 1.0;
+  
+  vec3 point = pointOnSphere(gl_TexCoord[0].st);
+  
+  float a_intersect = projIntersection(point,
+    proj_a_yaw,proj_a_pitch,proj_a_tower_height,proj_a_offset);
+  float b_intersect = projIntersection(point,
+    proj_b_yaw,proj_b_pitch,proj_b_tower_height,proj_b_offset);
+  float c_intersect =projIntersection(point,
+    proj_c_yaw,proj_c_pitch,proj_c_tower_height,proj_c_offset);
+  
+  gl_FragColor.r += proj_multi.x * a_intersect;
+  gl_FragColor.g += proj_multi.y * b_intersect;
+  gl_FragColor.b += proj_multi.z * c_intersect;
+  gl_FragColor.a += a_intersect / 6.0;
+  gl_FragColor.a += b_intersect / 6.0;
+  gl_FragColor.a += c_intersect / 6.0;
 }
 
