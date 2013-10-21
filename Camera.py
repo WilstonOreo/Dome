@@ -62,18 +62,18 @@ class Camera:
         self.target = Point3D()
 
         # This is the up vector for the (local) camera space
-        self.up = Vector3D()
+        self.up = Vector3D(0,0,1)
 
         # This is the up vector for the (global) world space;
         # it is perpendicular to the horizontal (x,z)-plane
-        self.ground = Vector3D(0,1,0)
+        self.ground = Vector3D(0,0,-1)
 
         self.reset()
 
     def reset(self):
         tangent = math.tan( self.FIELD_OF_VIEW_IN_DEGREES/2.0 / 180.0 * math.pi )
         distanceFromTarget = self.sceneRadius / tangent
-        self.position = Point3D(0,0,distanceFromTarget)
+        self.position = Point3D(0,distanceFromTarget,0)
         self.target = Point3D(0,0,0)
         self.up = self.ground.returnCopy()
 

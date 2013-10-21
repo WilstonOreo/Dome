@@ -32,6 +32,8 @@ from PyQt4.QtOpenGL import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
+from Projector import Projector
+from Projector import Projectors3
 
 import math
 import numpy
@@ -42,10 +44,11 @@ except ImportError, err:
 
 
 from Base import *
-import Dome
 
 from Texture import Texture
 from Shader import Shader
+
+import CanvasModel
 
 TEXTURE_PATH = "./images"
 
@@ -55,15 +58,17 @@ class GLWidget(QGLWidget):
         QGLWidget.__init__(self, parent)
         self.setMouseTracking(True)
         self.selectedProj = -1
-        self.dome = Dome.Dome(7.5,3.5,Point3D())
-        self.projectors = [
-          Dome.Projector(0,38),
-          Dome.Projector(120,38),
-          Dome.Projector(240,38)]
+        self.canvasModel = CanvasModel.Dome(23.0,11.5,11.5,0.0,1.0)
+        self.showCanvas = True
+        self.projectors = Projectors3(Projector(11.5),Projector(11.5),Projector(11.5),
+              0.0, # Distance a to b
+              0.0, # Distance a to c
+              0.0,  # Tower Height
+              25.0, # Pitch Angle
+              0.0) # Yaw Angle
 
+        self.edgeBlending = True
         self.showProjectorImages = True
-        self.showProjectors = True
-        self.showDome = True
         self.projImagesFullscreen = False
         # self.setMinimumSize(500, 500)
         
@@ -73,38 +78,27 @@ class GLWidget(QGLWidget):
         self.isPressed = False
         self.oldx = self.oldy = 0
         
-        # Offsets for all three projectors
-        self.pitchOffsets = [0.0,0.0,0.0]
-        self.yawOffsets = [0.0,0.0,0.0]
-
         self.textureFiles = os.listdir(TEXTURE_PATH)
         self.textures = dict()
         self.shaders = dict()
-        self.selTexture = "(none)"
+        self.selTexture = "spherical_small"
 
     def paintGL(self): 
       def paintProjectorImage(proj,offset,size,alpha):
-
         glColor(1.0,1.0,1.0,alpha)
-        ar = 1.0 / proj.aspectRatio 
+        ar = 1.0 / proj.aspectRatio * 3.0
  
-        if self.selTexture in self.textures:
-          shader = self.shaders["proj"]
-          shader.use()
-          glActiveTexture(GL_TEXTURE0); # use first texturing unit
-          shader.set(proj_texture = ("1i",[0]),
-              dome_base_offset = ("1f",[self.dome.baseOffset]),
-              dome_inner_radius = ("1f",[self.dome.innerRadius]),
-              dome_radius = ("1f",[self.dome.radius]),
-              proj_tower_height = ("1f",[proj.towerHeight]),
-              proj_yaw = ("1f",[proj.yawAngle]),
-              proj_pitch = ("1f",[proj.pitchAngle]),
-              proj_offset = ("2f",[[proj.offset.x(),proj.offset.y()]]),
-              proj_aspect_ratio = ("1f",[proj.aspectRatio]),
-              proj_fov = ("1f",[proj.fov]),
-              alpha_value = ("1f",[alpha]))
-
-          self.textures[self.selTexture].setup()
+        className = str(self.canvasModel.__class__)
+        projShader = self.shaders[className+"_proj"]
+       # if self.selTexture in self.textures:
+        glActiveTexture(GL_TEXTURE0); # use first texturing unit
+        
+        projShader.use()
+        projShader.set(proj_texture = ("1i",[0]),
+            alpha_value = ("1f",[alpha]))
+        self.canvasModel.shaderSettings(projShader)
+        self.projectors.shaderSettings(projShader)
+        self.textures[self.selTexture].setup()
           
         glBegin( GL_QUADS )
         glTexCoord2f(0.0, 0.0); glVertex2fv(offset)
@@ -112,18 +106,36 @@ class GLWidget(QGLWidget):
         glTexCoord2f(1.0, 1.0); glVertex2f(offset[0]+ar*size,offset[1]+size)
         glTexCoord2f(0.0, 1.0); glVertex2f(offset[0],offset[1]+size)
         glEnd()
+        
+        projShader.unuse()
 
-        if self.selTexture in self.textures:
-          shader.unuse()
+        if self.edgeBlending:
+          edgeBlendShader = self.shaders[className+"_edgeblend"]
+          edgeBlendShader.use()
+      #    edgeBlendShader.set(proj_texture = ("1i",[0]),
+      #        alpha_value = ("1f",[alpha]))
+          self.canvasModel.shaderSettings(edgeBlendShader)
+          self.projectors.shaderSettings(edgeBlendShader)
+          self.projectors.edgeBlendShaderSettings(edgeBlendShader)
+        
+          glBegin( GL_QUADS )
+          glTexCoord2f(0.0, 0.0); glVertex2fv(offset)
+          glTexCoord2f(1.0, 0.0); glVertex2f(offset[0]+ar*size,offset[1]) 
+          glTexCoord2f(1.0, 1.0); glVertex2f(offset[0]+ar*size,offset[1]+size)
+          glTexCoord2f(0.0, 1.0); glVertex2f(offset[0],offset[1]+size)
+          glEnd()
 
-      def drawProjectorImages():
+          edgeBlendShader.unuse()
 
+
+
+      def drawProjectorImage():
         glLoadIdentity()
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
         gluOrtho2D(0,1 / float(self.height()) * self.width(),0,1)
-        glMatrixMode(GL_MODELVIEW);
-        #glLoadIdentity();
+        glMatrixMode(GL_MODELVIEW)
+        glLoadIdentity()
 
         glDisable( GL_DEPTH_TEST )
         glDisable( GL_CULL_FACE ) 
@@ -133,17 +145,9 @@ class GLWidget(QGLWidget):
           bottom = 0.05
           size = 0.2
           xOffset = 0.05
-          for proj in self.projectors:
-            paintProjectorImage(proj,[xOffset,bottom],size,1.0)
-            xOffset += size / proj.aspectRatio + 0.05
-
-      def drawProjectors():
-        idx = 0
-        colors = [[1,0,0],[0,1,0],[0,0,1]]
-        for proj in self.projectors:
-          if idx == self.selectedProj or self.selectedProj == -1:
-            proj.draw(self.dome,colors[idx])
-          idx += 1
+          proj = self.projectors
+          paintProjectorImage(proj,[xOffset,bottom],size,1.0)
+          xOffset += size / proj.aspectRatio + 0.05
  
       glDisable(GL_TEXTURE_2D)
       light0 = Light(GL_LIGHT0,Point3D(0.0,-20.0,-20.0))
@@ -159,25 +163,34 @@ class GLWidget(QGLWidget):
 
       glDepthFunc( GL_LEQUAL );
       glEnable( GL_DEPTH_TEST );
-      #glEnable( GL_CULL_FACE );
-      #glFrontFace( GL_CCW );
-
-      glRotatef(90,1,0,0)
-      glTranslatef(0,0,self.dome.baseHeight + self.dome.towerHeight)
       
-      if self.showProjectors:
-        drawProjectors()
- 
-      if self.showDome: 
+      colors = { "projA" : [1,0,0],
+          "projB" : [0,1,0],
+          "projC" : [0,0,1] }
+
+      glPushMatrix()
+      glLoadIdentity()
+      self.projectors.drawA(self.canvasModel,colors["projA"])
+      self.projectors.drawB(self.canvasModel,colors["projB"])
+      self.projectors.drawC(self.canvasModel,colors["projC"])
+      glPopMatrix()
+      
+
+      if self.showCanvas: 
         mode = GLU_FILL
         texture = None
+
         if self.selTexture in self.textures:
           texture = self.textures[self.selTexture]
-        self.dome.draw(mode,texture,self.shaders["inv_proj"],self.projectors,self.selectedProj)
-
-      if self.showProjectorImages:
-        drawProjectorImages()
-        
+        shader = self.shaders[str(self.canvasModel.__class__)+"_inv_proj"]
+        shader.use()
+        self.canvasModel.shaderSettings(shader)
+        self.projectors.shaderSettings(shader)
+        shader.set(proj_multi = ("4f",[[1.0,1.0,1.0,1.0]]))
+        self.canvasModel.draw(mode,texture,colors,None,self.selectedProj)
+        shader.unuse()
+      drawProjectorImage()
+      
       glFlush()
 
     def resizeGL(self, widthInPixels, heightInPixels):
@@ -188,10 +201,14 @@ class GLWidget(QGLWidget):
       glClearColor(0.0, 0.0, 0.0, 1.0)
       glClearDepth(1.0)
  
-      self.shaders["proj"] = Shader("shaders/proj.vert","shaders/proj.frag") 
-      self.shaders["edgeblend"] = Shader("shaders/edgeblend.vert","shaders/edgeblend.frag") 
-      self.shaders["inv_proj"] = Shader("shaders/inv_proj.vert","shaders/inv_proj.frag") 
-      #sys.exit(0)
+      domeStr = "CanvasModel.Dome"
+      self.shaders[domeStr+"_proj"] = Shader("shaders/dome_proj.vert","shaders/dome_proj.frag") 
+      self.shaders[domeStr+"_edgeblend"] = Shader("shaders/dome_edgeblend.vert","shaders/dome_edgeblend.frag") 
+      self.shaders[domeStr+"_inv_proj"] = Shader("shaders/dome_inv_proj.vert","shaders/dome_inv_proj.frag") 
+ #     cycloramaStr = "CanvasModel.Cyclorama"
+ #     self.shaders[cycloramaStr+"_proj"] = Shader("shaders/cyclorama_proj.vert","shaders/dome_proj.frag") 
+  #    self.shaders[cycloramaStr+"_edgeblend"] = Shader("shaders/cyclorama_edgeblend.vert","shaders/cyclorama_edgeblend.frag") 
+   #   self.shaders[cycloramaStr+"_inv_proj"] = Shader("shaders/dome_inv_proj.vert","shaders/dome_inv_proj.frag") 
       
       for textureFile in self.textureFiles:
         texFile = os.path.join(TEXTURE_PATH,textureFile)
@@ -214,6 +231,16 @@ class GLWidget(QGLWidget):
         self.oldy = mouseEvent.y()
 
 
+    def getSelectedProj(self):
+      proj = None
+      if self.selectedProj == 0:
+        proj = self.projectors.a
+      elif self.selectedProj == 1:
+        proj = self.projectors.b
+      elif self.selectedProj == 2:
+        proj = self.projectors.c
+      return proj
+
     def setShowProjectorImages(self, value):
       self.showProjectorImages = value
       self.update()
@@ -222,60 +249,8 @@ class GLWidget(QGLWidget):
       self.edgeBlending = value
       self.update()
 
-    def setDomeDiameter(self, value):
-      self.dome.radius = value / 2.0
-      self.update()
-    
-    def setDomeInnerDiameter(self, value):
-      self.dome.innerRadius = value / 2.0
-      self.update()
-    
-    def setBaseHeight(self, value):
-      self.dome.baseHeight = value
-      self.update()
-
-    def setTowerHeight(self, value):
-      for proj in self.projectors:
-        proj.towerHeight = value
-      self.update()
-
-    def setShowDome(self, value):
-      self.showDome = value
-      self.update()
-
-    def setAngleOfView(self, value):
-      for proj in self.projectors:
-        proj.fov = value
-      self.update()
-    
-    def setAspectRatio(self, value):
-      for proj in self.projectors:
-        proj.aspectRatio = value
-      self.update()
-
-    def setShowProjectors(self, value):
-      self.showProjectors = value
-      self.update()
-    
-    def setBaseOffset(self, value):
-      self.dome.baseOffset = value
-      self.update()
-
     def setProjImagesFullscreen(self,value):
       self.projImagesFullscreen = value
-      self.update()
-
-    def setShowScreenPoints(self, value):
-      self.showScreenPoints = value
-      self.update()
-
-    def setShowProjectedPoints(self, value):
-      self.showProjectedPoints = value
-      self.update()
-      
-    def setPatchResolution(self, value):
-      for proj in self.projectors:
-        proj.patchResolution = value
       self.update()
     
     #def mouseDoubleClickEvent(self, mouseEvent):

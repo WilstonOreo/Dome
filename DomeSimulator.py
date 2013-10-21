@@ -26,6 +26,8 @@ from __future__ import print_function
 from PyQt4 import QtGui, QtCore, uic
 from OpenGL.GLUT import *
 from optparse import OptionParser
+import Shader
+import CanvasModel
 
 import os, sys
 import qdarkstyle
@@ -69,59 +71,121 @@ class DomeGUI(QtGui.QMainWindow):
 
     self.setProjectorSettings()
     self.glWidget.selectedProj = projId
-    allSelected = projId == -1 
-
-    self.boxYawOffset.setDisabled(allSelected)
-    self.boxPitchOffset.setDisabled(allSelected)
-    self.boxOffsetX.setDisabled(allSelected)
-    self.boxOffsetY.setDisabled(allSelected)
+    proj = self.glWidget.getSelectedProj()
+    allSelected = proj is None
+    objects = [
+        self.boxYawOffset,
+        self.boxPitchOffset,
+        self.boxRollOffset,
+        self.boxHeightOffset,
+        self.boxShift,
+        self.boxEdgeBlur,
+        self.boxEdgeOffset,
+        self.boxGamma,
+        self.boxTopLeftRight]
+    for obj in objects:
+      obj.setDisabled(allSelected)
 
     if not allSelected:
-      proj = self.glWidget.projectors[projId]
-      objects = [self.boxYawOffset,
-          self.boxPitchOffset,
-          self.boxOffsetX,
-          self.boxOffsetY]
-
       disconnect(objects)
-      self.boxYawOffset.setValue(self.glWidget.yawOffsets[projId])
-      self.boxPitchOffset.setValue(self.glWidget.pitchOffsets[projId])
-      self.boxOffsetX.setValue(proj.offset.x())
-      self.boxOffsetY.setValue(proj.offset.y())
+      self.boxYawOffset.setValue(proj.deltaYaw)
+      self.boxPitchOffset.setValue(proj.deltaPitch)
+      self.boxRollOffset.setValue(proj.roll)
+      self.boxHeightOffset.setValue(proj.deltaHeight)
+      self.boxShift.setValue(proj.shift)
+      self.boxEdgeBlur.setValue(proj.edgeBlendBlur)
+      self.boxGamma.setValue(proj.edgeBlendGamma)
+      self.boxTopLeftRight.setValue(proj.edgeBlendTopLeftRight)
+      self.boxEdgeOffset.setValue(proj.edgeBlendOffset)
       connect(objects)
-
     self.glWidget.update()
 
   def setProjectorSettings(self,value = 0.0):    
-    allSelected = self.glWidget.selectedProj == -1 
-    if not allSelected:
-      projId = self.glWidget.selectedProj
-      proj = self.glWidget.projectors[projId]
-      self.glWidget.yawOffsets[projId] = self.boxYawOffset.value()
-      self.glWidget.pitchOffsets[projId] = self.boxPitchOffset.value()
-      proj.offset = Vector3D(
-          self.boxOffsetX.value(),
-          self.boxOffsetY.value(),0.0)
-      proj.yawAngle = self.boxYawAngle.value() + projId*120 + self.glWidget.yawOffsets[projId] 
-      proj.pitchAngle = self.boxPitchAngle.value() + self.glWidget.pitchOffsets[projId]
+    proj = self.glWidget.getSelectedProj()
 
-    for projId in range(0,3):
-      proj = self.glWidget.projectors[projId]
-      proj.yawAngle = self.boxYawAngle.value() + projId*120 + self.glWidget.yawOffsets[projId] 
-      proj.pitchAngle = self.boxPitchAngle.value() + self.glWidget.pitchOffsets[projId]
-      proj.drawFrustum = self.chkFrustum.isChecked()
-      proj.drawRays = self.chkRays.isChecked()
-      proj.drawGrid = self.chkGrid.isChecked()
-      proj.drawProjections = self.chkHighlightProjections.isChecked()
-      proj.drawProjPoints = self.chkProjPoints.isChecked()
+    if proj is not None: 
+      proj.deltaYaw = self.boxYawOffset.value()
+      proj.deltaPitch = self.boxPitchOffset.value()
+      proj.deltaHeight = self.boxHeightOffset.value()
+      proj.roll = self.boxRollOffset.value()
+      proj.shift = self.boxShift.value()
+      proj.edgeBlendBlur = self.boxEdgeBlur.value()
+      proj.edgeBlendGamma = self.boxGamma.value()
+      proj.edgeBlendTopLeftRight = self.boxTopLeftRight.value()
+      proj.edgeBlendOffset = self.boxEdgeOffset.value()
+    
+    projectors = self.glWidget.projectors
+    projA, projB, projC = projectors.a, projectors.b, projectors.c
 
+    projA.distance_center = self.boxACenter.value()
+    projB.distance_center = self.boxBCenter.value()
+    projC.distance_center = self.boxCCenter.value()
+
+    projA.draw = self.chkFrustum.isChecked()
+    projB.draw = self.chkFrustum.isChecked()
+    projC.draw = self.chkFrustum.isChecked()
+    
+    projA.drawProjections = self.chkHighlightProjections.isChecked()
+    projB.drawProjections = self.chkHighlightProjections.isChecked()
+    projC.drawProjections = self.chkHighlightProjections.isChecked()
+
+    projectors.fov = self.boxAngleOfView.value()
+    projectors.aspectRatio = self.boxAspectRatio.value()
+    projectors.distance_a_b = self.boxAB.value()
+    projectors.distance_a_c = self.boxAC.value()
+    projectors.yawAngle = self.boxYawAngle.value()
+    projectors.pitchAngle = self.boxPitchAngle.value()
+    projectors.height = self.boxTowerHeight.value()
     self.glWidget.update()
 
-if __name__ == '__main__': 
-  app = QtGui.QApplication(['Dome'])
-  glutInit(sys.argv)
-  window = DomeGUI()
-  window.show()
+  def setDomeSettings(self,value = 0.0):
+    self.glWidget.canvasModel = CanvasModel.Dome(
+        self.boxDomeDiameter.value(),
+        self.boxCenterPole.value(),
+        self.boxCenterEquator.value(),
+        self.boxRangeTop.value(),
+        self.boxRangeBottom.value())
+    self.glWidget.showCanvas = self.chkShowDome.isChecked()
+    self.glWidget.update()
 
-  sys.exit(app.exec_())
+
+  def setCycloramaSettings(self,value = 0.0):
+    self.glWidget.canvasModel = CanvasModel.Cyclorama(
+        self.boxCycloramaDiameter.value(),
+        self.boxCycloramaHeight.value(),
+        self.boxCycloramaOffset.value())
+    self.glWidget.showCanvas = self.chkShowDome.isChecked()
+    self.glWidget.update()
+
+  def setCanvasModel(self):
+    if self.btnDome.isChecked():
+      self.grpCyclorama.hide()
+      self.setDomeSettings()
+      self.grpDome.show()
+
+    elif self.btnCyclorama.isChecked():
+      self.grpCyclorama.show()
+      self.grpDome.hide()
+      self.setCycloramaSettings()
+
+
+if __name__ == '__main__': 
+
+  parser = OptionParser()
+  parser.add_option("-s","--shader", action="store", type="string", dest="shader")
+  parser.add_option("-n","--no-gui", action="store_true", dest="no_gui",
+                  help="Be moderately verbose")
+  
+  (options, args) = parser.parse_args()
+
+  if options.shader is not None:
+    print(Shader.getShader(options.shader,set(options.shader)))
+    exit()
+
+  if not options.no_gui:
+    app = QtGui.QApplication(['Dome'])
+    glutInit(sys.argv)
+    window = DomeGUI()
+    window.show()
+    sys.exit(app.exec_())
 

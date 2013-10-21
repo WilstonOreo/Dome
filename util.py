@@ -26,6 +26,30 @@ from __future__ import print_function
 import math, numpy
 from MyGeom import *
 
+def intersectionPointsOfCircles(a,b,c,d,r0,r1):
+  det = (c-a)**2 + (d-b)**2
+  if det < 0: return None
+  D = math.sqrt(det)
+
+  detR = (D + r0 + r1) * (D + r0 - r1) * (D - r0 + r1) * (-D + r0 +r1)
+  if detR < 0: return None
+
+  delta = 0.25 * math.sqrt(detR)
+  rDiff = (r0**2 - r1**2)
+  xTerm1 = 0.5 * (a + c + (c - a) * rDiff / det) 
+  xTerm2 = 2 * (b - d) / det * delta
+  yTerm1 = 0.5 *(b + d + (d - b) * rDiff / det) 
+  yTerm2 = 2 * (a - c) / det * delta
+
+  x1 = xTerm1 + xTerm2
+  x2 = xTerm1 - xTerm2
+  y1 = yTerm1 - yTerm2
+  y2 = yTerm1 + yTerm2 
+  return ((x1,y1),(x2,y2))
+
+def intersectionPointsOfCirclesFromPoints(pos0,r0,pos1,r1):
+  return intersectionPointsOfCircles(pos0.x(),pos0.y(),pos1.x(),pos1.y(),r0,r1)
+
 def xfrange(start, stop, step):
     while start < stop:
         yield start
@@ -46,3 +70,7 @@ def pointOnSphere(pos,radius,yawAngle,pitchAngle):
 """
 def interpolate(v,p0,p1):
   return p0 + v * (p1 - p0)
+
+def getYawAngle(v):
+  return math.degrees(math.atan2(v.y(),v.x()))
+

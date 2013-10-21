@@ -32,20 +32,70 @@ from OpenGL.GLUT import *
 from OpenGL.GL.shaders import *
 
 
+def getShader(filename,excludedHeaders):
+  PREFIX = "#include"
+
+  def getIncludeFilename(line):
+    s = line[len(PREFIX):] 
+    s = s.lstrip('"< \t\n')
+    s = s.rstrip('"> \t\n')
+    candidates = [
+        os.path.join(os.path.dirname(filename),s),s]
+    for candidate in candidates:
+      if os.path.exists(candidate):
+        return candidate
+
+  f = open(filename,'r')
+  shaderStr = ""
+  lineNr = 0
+  for line in f:
+    lineNr += 1
+    if line.startswith(PREFIX):
+      filename = getIncludeFilename(line.strip())
+      if filename is not None:  
+        shaderStr += "/" * 10 + " " + filename + " " + "/" * 10 + "\n" 
+        filename = getIncludeFilename(line.strip())
+        if not filename in excludedHeaders:
+          shaderStr += getShader(filename,excludedHeaders)
+          excludedHeaders.add(filename)
+      else:
+        print("Include file %s (line %d) not found, aborting!" % (line.strip(),lineNr))
+        return
+    else:
+      shaderStr += line
+  return shaderStr
+
+
 class Shader:
   def __init__(self,vertFilename,fragFilename):
-    def fileAsStr(filename):
-      f = open(filename,'r')
-      s = f.read()
-      f.close()
-      return s
+    def catchException(err):
+      errString = err[0]
+      posToken = errString.split(":")[2]
+      #print(posToken)
+      #lineNumber = int(posToken.strip().lstrip("0123456789").lstrip("(").rstrip(")"))
+      lineNumber = int(posToken.split('(')[0])
+      source = err[1][0].split('\n')
+      lineIdx = 1
+      lines = 20
+      print(err[0])
+      for line in source:
+        if (lineIdx - lines <= lineNumber) and (lineIdx + lines > lineNumber):
+          suffix = "<<<<<<<<" if lineIdx == lineNumber else ""
+          prefix = ">>>>>>>>" if lineIdx == lineNumber else ""
+          print(str(lineIdx)+"\t"+prefix+"\t"+line+"\t"+suffix)
+        lineIdx += 1
+#      print(err[1][0])
 
-    vertexShaderSource = fileAsStr(vertFilename)
-    fragmentShaderSource = fileAsStr(fragFilename)
+    vertexShaderSource = getShader(vertFilename,set(vertFilename))
+    fragmentShaderSource = getShader(fragFilename,set(fragFilename))
 
-    self.program = compileProgram(
-        compileShader(vertexShaderSource,GL_VERTEX_SHADER),
-        compileShader(fragmentShaderSource,GL_FRAGMENT_SHADER))
+    vertexShader = compileShader(vertexShaderSource,GL_VERTEX_SHADER)
+    try:
+      fragmentShader = compileShader(fragmentShaderSource,GL_FRAGMENT_SHADER)
+    except RuntimeError as err:
+      catchException(err)
+
+    self.program = compileProgram(vertexShader,fragmentShader)
   
   def set(self,**kwargs):
     for key in kwargs:
