@@ -27,6 +27,9 @@ import numpy
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
+# PyOpenGL 3.0.1 introduces this convenience module...
+from OpenGL.GL.shaders import *
+
 
 try:
     from PIL.Image import open as ImageOpen
@@ -40,6 +43,7 @@ class Texture:
   def setup(self): 
     #glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
     glEnable(GL_TEXTURE_2D)
+    glActiveTexture(GL_TEXTURE0 + self.imageID)
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE)   
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
                      GL_REPEAT);
@@ -56,6 +60,7 @@ class Texture:
     img_data = numpy.array(im.getdata(), numpy.uint8)
 
     self.imageID = glGenTextures(1)
+    print(self.imageID)
     glPixelStorei(GL_UNPACK_ALIGNMENT,1)
     glBindTexture(GL_TEXTURE_2D, self.imageID)
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP)

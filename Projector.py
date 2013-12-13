@@ -50,6 +50,31 @@ class Projector:
     self.edgeBlendGamma = 1.0
     self.edgeBlendTopLeftRight = 0.05
     self.edgeBlendOffset = 0.00
+    self.edgeBlendSqueeze = 0.0
+
+  def shaderSettings(self,prefix,shader):
+    shader.setArgs(prefix,[
+      ("alpha",1.0),
+      ("gamma",1.0),
+      ("delta_yaw",self.deltaYaw),
+      ("delta_height",self.deltaHeight),
+      ("delta_pitch",self.deltaPitch),
+      ("roll",self.roll),
+      ("shift",self.shift),
+      ("distance_center",self.distance_center)])
+
+  def edgeBlendShaderSettings(self,prefix,shader):
+    shader.setArgs(prefix,[
+      ("top",self.edgeBlendTopLeftRight),
+      ("left_side",self.edgeBlendTopLeftRight),
+      ("right_side",self.edgeBlendTopLeftRight),
+      ("edge_blur",self.edgeBlendBlur),
+      ("edge_gamma",self.edgeBlendGamma),
+      ("edge_offset",self.edgeBlendOffset),
+      ("squeeze_left",self.edgeBlendSqueeze),
+      ("squeeze_right",self.edgeBlendSqueeze),
+      ("squeeze_top",self.edgeBlendSqueeze),
+      ("squeeze_bottom",self.edgeBlendSqueeze)])
 
   def genBorderPoints(self,pos,yaw,pitch,fov,aspectRatio,length):
     def rotMat(absYaw,absPitch):

@@ -35,6 +35,8 @@ from OpenGL.GLUT import *
 from Projector import Projector
 from Projector import Projectors3
 
+from Projectors4 import Projectors4
+
 import math
 import numpy
 try:
@@ -60,9 +62,11 @@ class GLWidget(QGLWidget):
         self.selectedProj = -1
         self.canvasModel = CanvasModel.Dome(23.0,11.5,11.5,0.0,1.0)
         self.showCanvas = True
-        self.projectors = Projectors3(Projector(11.5),Projector(11.5),Projector(11.5),
-              0.0, # Distance a to b
-              0.0, # Distance a to c
+        self.projectors = Projectors4(
+            Projector(11.5),
+            Projector(11.5),
+            Projector(11.5),
+            Projector(11.5),
               0.0,  # Tower Height
               25.0, # Pitch Angle
               0.0) # Yaw Angle
@@ -86,7 +90,7 @@ class GLWidget(QGLWidget):
     def paintGL(self): 
       def paintProjectorImage(proj,offset,size,alpha):
         glColor(1.0,1.0,1.0,alpha)
-        ar = 1.0 / proj.aspectRatio * 3.0
+        ar = 1.0 / proj.aspectRatio * 4.0
  
         className = str(self.canvasModel.__class__)
         projShader = self.shaders[className+"_proj"]
@@ -127,8 +131,6 @@ class GLWidget(QGLWidget):
 
           edgeBlendShader.unuse()
 
-
-
       def drawProjectorImage():
         glLoadIdentity()
         glMatrixMode(GL_PROJECTION)
@@ -166,16 +168,17 @@ class GLWidget(QGLWidget):
       
       colors = { "projA" : [1,0,0],
           "projB" : [0,1,0],
-          "projC" : [0,0,1] }
+          "projC" : [0,0,1],
+          "projC" : [1,1,0] }
 
       glPushMatrix()
       glLoadIdentity()
-      self.projectors.drawA(self.canvasModel,colors["projA"])
-      self.projectors.drawB(self.canvasModel,colors["projB"])
-      self.projectors.drawC(self.canvasModel,colors["projC"])
+      #self.projectors.drawA(self.canvasModel,colors["projA"])
+      #self.projectors.drawB(self.canvasModel,colors["projB"])
+      #self.projectors.drawC(self.canvasModel,colors["projC"])
+      #self.projectors.drawD(self.canvasModel,colors["projD"])
       glPopMatrix()
       
-
       if self.showCanvas: 
         mode = GLU_FILL
         texture = None
@@ -202,8 +205,8 @@ class GLWidget(QGLWidget):
       glClearDepth(1.0)
  
       domeStr = "CanvasModel.Dome"
-      self.shaders[domeStr+"_proj"] = Shader("shaders/dome_proj.vert","shaders/dome_proj.frag") 
-      self.shaders[domeStr+"_edgeblend"] = Shader("shaders/dome_edgeblend.vert","shaders/dome_edgeblend.frag") 
+      self.shaders[domeStr+"_proj"] = Shader("shaders/dome_proj.vert","shaders/dome_4proj.frag") 
+      self.shaders[domeStr+"_edgeblend"] = Shader("shaders/dome_edgeblend.vert","shaders/dome_edgeblend_4proj.frag") 
       self.shaders[domeStr+"_inv_proj"] = Shader("shaders/dome_inv_proj.vert","shaders/dome_inv_proj.frag") 
  #     cycloramaStr = "CanvasModel.Cyclorama"
  #     self.shaders[cycloramaStr+"_proj"] = Shader("shaders/cyclorama_proj.vert","shaders/dome_proj.frag") 

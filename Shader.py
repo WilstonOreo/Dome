@@ -100,6 +100,10 @@ class Shader:
   def set(self,**kwargs):
     for key in kwargs:
       self.setUniform(kwargs[key][0],key,kwargs[key][1])
+  
+  def setArgs(self,prefix,argList):
+    for arg in argList:
+      self.setUniform("1f",prefix+"_"+arg[0],[arg[1]])
 
   def setUniform(self,vecType,key,value):
     #loc = glGetUniformLocation(self.program,key)
