@@ -31,16 +31,18 @@ from OpenGL.GLUT import *
 # PyOpenGL 3.0.1 introduces this convenience module...
 from OpenGL.GL.shaders import *
 
-
 def getShader(filename,excludedHeaders):
   PREFIX = "#include"
-
   def getIncludeFilename(line):
     s = line[len(PREFIX):] 
     s = s.lstrip('"< \t\n')
     s = s.rstrip('"> \t\n')
+
     candidates = [
-        os.path.join(os.path.dirname(filename),s),s]
+        os.path.join(os.path.dirname(filename),s),s] 
+    for path in sys.path:
+      candidates.append(os.path.join(os.path.dirname(path),s))
+   # print(candidates)
     for candidate in candidates:
       if os.path.exists(candidate):
         return candidate
@@ -70,10 +72,15 @@ class Shader:
   def __init__(self,vertFilename,fragFilename):
     def catchException(err):
       errString = err[0]
+
+      ## NVIDIA
+#posToken = errString.split(":")[1]
+#      lineNumber = int(posToken.strip().lstrip("0123456789").lstrip("(").rstrip(")"))
+       
+      ## ATI
       posToken = errString.split(":")[2]
-      #print(posToken)
-      #lineNumber = int(posToken.strip().lstrip("0123456789").lstrip("(").rstrip(")"))
       lineNumber = int(posToken.split('(')[0])
+      
       source = err[1][0].split('\n')
       lineIdx = 1
       lines = 20

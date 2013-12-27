@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>876</width>
-    <height>908</height>
+    <width>861</width>
+    <height>1239</height>
    </rect>
   </property>
   <property name="acceptDrops">
@@ -32,7 +32,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>876</width>
+     <width>861</width>
      <height>25</height>
     </rect>
    </property>
@@ -53,126 +53,6 @@
      <property name="fieldGrowthPolicy">
       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
      </property>
-     <item row="1" column="1">
-      <widget class="QGroupBox" name="grpDome">
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <property name="title">
-        <string>Dome</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <item>
-         <layout class="QFormLayout" name="domeForm">
-          <property name="fieldGrowthPolicy">
-           <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-          </property>
-          <property name="horizontalSpacing">
-           <number>6</number>
-          </property>
-          <item row="1" column="0">
-           <widget class="QLabel" name="lbDomeDiameter">
-            <property name="text">
-             <string>Dome Diameter</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QDoubleSpinBox" name="boxDomeDiameter">
-            <property name="value">
-             <double>15.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="lbTestImage">
-            <property name="text">
-             <string>Test image</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QComboBox" name="boxImages"/>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="lbBaseHeight">
-            <property name="text">
-             <string>Base Height</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QDoubleSpinBox" name="boxBaseHeight">
-            <property name="singleStep">
-             <double>0.100000000000000</double>
-            </property>
-            <property name="value">
-             <double>3.500000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="showDomeLabel">
-            <property name="text">
-             <string>Show Dome</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="1">
-           <widget class="QCheckBox" name="chkShowDome">
-            <property name="text">
-             <string/>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="lblInnerDiameter">
-            <property name="text">
-             <string>Inner Diameter</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QDoubleSpinBox" name="boxInnerDiameter">
-            <property name="maximum">
-             <double>100.000000000000000</double>
-            </property>
-            <property name="singleStep">
-             <double>0.100000000000000</double>
-            </property>
-            <property name="value">
-             <double>12.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="lblBaseOffset">
-            <property name="text">
-             <string>Base Offset</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1">
-           <widget class="QDoubleSpinBox" name="boxBaseOffset">
-            <property name="minimum">
-             <double>-100.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>100.000000000000000</double>
-            </property>
-            <property name="singleStep">
-             <double>0.100000000000000</double>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-     </item>
      <item row="2" column="1">
       <widget class="QGroupBox" name="grpProjectorSettings">
        <property name="styleSheet">
@@ -186,6 +66,9 @@
          <layout class="QFormLayout" name="formLayout">
           <property name="fieldGrowthPolicy">
            <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+          </property>
+          <property name="verticalSpacing">
+           <number>0</number>
           </property>
           <item row="0" column="0">
            <widget class="QLabel" name="lbAngleOfView">
@@ -230,78 +113,149 @@
             </property>
            </widget>
           </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="distancesLabel">
+            <property name="text">
+             <string>Distances</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <layout class="QGridLayout" name="gridLayout_2">
+            <property name="verticalSpacing">
+             <number>0</number>
+            </property>
+            <item row="4" column="1">
+             <widget class="QDoubleSpinBox" name="boxCCenter">
+              <property name="value">
+               <double>11.500000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="label_5">
+              <property name="text">
+               <string>C-Center</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="1">
+             <widget class="QDoubleSpinBox" name="boxAB">
+              <property name="minimum">
+               <double>-360.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>360.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>A-Center</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="0">
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>A to B</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="0">
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>A to C</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="1">
+             <widget class="QDoubleSpinBox" name="boxAC">
+              <property name="minimum">
+               <double>-360.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>360.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QDoubleSpinBox" name="boxACenter">
+              <property name="value">
+               <double>11.500000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="label_4">
+              <property name="text">
+               <string>B-Center</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QDoubleSpinBox" name="boxBCenter">
+              <property name="singleStep">
+               <double>1.000000000000000</double>
+              </property>
+              <property name="value">
+               <double>11.500000000000000</double>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
           <item row="4" column="0">
+           <widget class="QLabel" name="lbTowerHeight">
+            <property name="text">
+             <string>Tower Height</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QDoubleSpinBox" name="boxTowerHeight">
+            <property name="singleStep">
+             <double>0.100000000000000</double>
+            </property>
+            <property name="value">
+             <double>0.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
            <widget class="QLabel" name="lbPitchAngle">
             <property name="text">
              <string>Pitch Angle</string>
             </property>
            </widget>
           </item>
-          <item row="4" column="1">
-           <widget class="QDoubleSpinBox" name="boxPitchAngle">
-            <property name="minimum">
-             <double>-90.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>90.000000000000000</double>
-            </property>
-            <property name="value">
-             <double>38.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="lbPatchResolution">
-            <property name="text">
-             <string>Patch Resolution</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="1">
-           <widget class="QSpinBox" name="boxPatchResolution">
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>128</number>
-            </property>
-            <property name="singleStep">
-             <number>1</number>
-            </property>
-            <property name="value">
-             <number>8</number>
-            </property>
-           </widget>
-          </item>
           <item row="6" column="0">
+           <widget class="QLabel" name="yawAngleLabel">
+            <property name="text">
+             <string>Yaw Angle</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <widget class="QDoubleSpinBox" name="boxYawAngle">
+            <property name="minimum">
+             <double>-360.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>360.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="0">
            <widget class="QLabel" name="showLabel">
             <property name="text">
              <string>Show</string>
             </property>
            </widget>
           </item>
-          <item row="6" column="1">
+          <item row="8" column="1">
            <layout class="QGridLayout" name="showLayout">
-            <item row="0" column="2">
-             <widget class="QCheckBox" name="chkRays">
-              <property name="text">
-               <string>Rays</string>
-              </property>
-              <property name="checked">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QCheckBox" name="chkGrid">
-              <property name="text">
-               <string>Grid</string>
-              </property>
-              <property name="checked">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
             <item row="0" column="0">
              <widget class="QCheckBox" name="chkFrustum">
               <property name="text">
@@ -312,17 +266,7 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="2">
-             <widget class="QCheckBox" name="chkProjPoints">
-              <property name="text">
-               <string>Proj. Points</string>
-              </property>
-              <property name="checked">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
+            <item row="0" column="1">
              <widget class="QCheckBox" name="chkHighlightProjections">
               <property name="text">
                <string>Highlight Projections</string>
@@ -334,14 +278,14 @@
             </item>
            </layout>
           </item>
-          <item row="7" column="0">
+          <item row="9" column="0">
            <widget class="QLabel" name="projectorImagesLabel">
             <property name="text">
              <string>Projector images</string>
             </property>
            </widget>
           </item>
-          <item row="7" column="1">
+          <item row="9" column="1">
            <layout class="QGridLayout" name="projImageLayout">
             <item row="0" column="0">
              <widget class="QCheckBox" name="chkShowProjectorImages">
@@ -369,37 +313,16 @@
             </item>
            </layout>
           </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="yawAngleLabel">
-            <property name="text">
-             <string>Yaw Angle</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QDoubleSpinBox" name="boxYawAngle">
+          <item row="5" column="1">
+           <widget class="QDoubleSpinBox" name="boxPitchAngle">
             <property name="minimum">
-             <double>-360.000000000000000</double>
+             <double>-90.000000000000000</double>
             </property>
             <property name="maximum">
-             <double>360.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="lbTowerHeight">
-            <property name="text">
-             <string>Tower Height</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QDoubleSpinBox" name="boxTowerHeight">
-            <property name="singleStep">
-             <double>0.100000000000000</double>
+             <double>90.000000000000000</double>
             </property>
             <property name="value">
-             <double>2.300000000000000</double>
+             <double>25.000000000000000</double>
             </property>
            </widget>
           </item>
@@ -422,6 +345,57 @@
           <property name="fieldGrowthPolicy">
            <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
           </property>
+          <property name="verticalSpacing">
+           <number>0</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="lbProjector">
+            <property name="text">
+             <string>Projector</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <layout class="QHBoxLayout" name="projSelLayout">
+            <item>
+             <widget class="QRadioButton" name="btnProjAll">
+              <property name="text">
+               <string>all</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="btnProj1">
+              <property name="text">
+               <string>A</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="btnProj2">
+              <property name="text">
+               <string>B</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="btnProj3">
+              <property name="text">
+               <string>C</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
           <item row="1" column="0">
            <widget class="QLabel" name="lbYawOffset">
             <property name="text">
@@ -471,187 +445,421 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="lbOffset">
+          <item row="4" column="0">
+           <widget class="QLabel" name="heightOffsetLabel">
             <property name="text">
-             <string>Offset</string>
+             <string>Height Offset</string>
             </property>
            </widget>
           </item>
-          <item row="3" column="1">
-           <layout class="QHBoxLayout" name="offsetLayout">
-            <property name="spacing">
-             <number>1</number>
+          <item row="4" column="1">
+           <widget class="QDoubleSpinBox" name="boxHeightOffset">
+            <property name="enabled">
+             <bool>false</bool>
             </property>
-            <item>
-             <widget class="QLabel" name="lbX">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-                <horstretch>1</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16</width>
-                <height>16</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>X</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QDoubleSpinBox" name="boxOffsetX">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimum">
-               <double>-100.000000000000000</double>
-              </property>
-              <property name="maximum">
-               <double>100.000000000000000</double>
-              </property>
-              <property name="singleStep">
-               <double>0.100000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="lbY">
-              <property name="maximumSize">
-               <size>
-                <width>16</width>
-                <height>16</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>Y</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QDoubleSpinBox" name="boxOffsetY">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimum">
-               <double>-100.000000000000000</double>
-              </property>
-              <property name="maximum">
-               <double>100.000000000000000</double>
-              </property>
-              <property name="singleStep">
-               <double>0.100000000000000</double>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="lbProjector">
-            <property name="text">
-             <string>Projector</string>
+            <property name="minimum">
+             <double>-5.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>5.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>0.100000000000000</double>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
-           <layout class="QHBoxLayout" name="projSelLayout">
-            <item>
-             <widget class="QRadioButton" name="btnProjAll">
-              <property name="text">
-               <string>all</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="btnProj1">
-              <property name="text">
-               <string>1</string>
-              </property>
-              <property name="checked">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="btnProj2">
-              <property name="text">
-               <string>2</string>
-              </property>
-              <property name="checked">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="btnProj3">
-              <property name="text">
-               <string>3</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
+          <item row="6" column="0">
+           <widget class="QLabel" name="shiftLabel">
+            <property name="text">
+             <string>Shift</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <widget class="QDoubleSpinBox" name="boxShift">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="minimum">
+             <double>-5.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>5.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>0.100000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="rollOffsetLabel">
+            <property name="text">
+             <string>Roll</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QDoubleSpinBox" name="boxRollOffset">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="minimum">
+             <double>-90.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>90.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>0.100000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0">
+           <widget class="QLabel" name="topBlurLabel">
+            <property name="text">
+             <string>Edge Blur</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="1">
+           <widget class="QDoubleSpinBox" name="boxEdgeBlur">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="decimals">
+             <number>3</number>
+            </property>
+            <property name="maximum">
+             <double>1.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>0.001000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="0">
+           <widget class="QLabel" name="gammaLabel">
+            <property name="text">
+             <string>Gamma</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="1">
+           <widget class="QDoubleSpinBox" name="boxGamma">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="decimals">
+             <number>3</number>
+            </property>
+            <property name="minimum">
+             <double>1.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>0.100000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="0">
+           <widget class="QLabel" name="leftRightLabel">
+            <property name="text">
+             <string>Top/Left/Right</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="1">
+           <widget class="QDoubleSpinBox" name="boxTopLeftRight">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="decimals">
+             <number>3</number>
+            </property>
+            <property name="maximum">
+             <double>1.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>0.001000000000000</double>
+            </property>
+            <property name="value">
+             <double>0.050000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="0">
+           <widget class="QLabel" name="edgeOffsetLabel">
+            <property name="text">
+             <string>Edge Offset</string>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="1">
+           <widget class="QDoubleSpinBox" name="boxEdgeOffset">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="decimals">
+             <number>3</number>
+            </property>
+            <property name="minimum">
+             <double>-1.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>1.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>0.001000000000000</double>
+            </property>
+            <property name="value">
+             <double>0.000000000000000</double>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
        </layout>
       </widget>
      </item>
+     <item row="0" column="1">
+      <widget class="QGroupBox" name="verticalGroupBox">
+       <property name="title">
+        <string>Canvas Model</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <layout class="QFormLayout" name="formLayout_2">
+          <property name="verticalSpacing">
+           <number>0</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>Model</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <item>
+             <widget class="QRadioButton" name="btnDome">
+              <property name="text">
+               <string>Dome</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="btnCyclorama">
+              <property name="text">
+               <string>Cyclorama</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="showDomeLabel">
+            <property name="text">
+             <string>Show</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QCheckBox" name="chkShowDome">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="lbTestImage">
+            <property name="text">
+             <string>Test image</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QComboBox" name="boxImages"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="grpDome">
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="title">
+           <string>Dome</string>
+          </property>
+          <layout class="QFormLayout" name="formLayout_5">
+           <property name="fieldGrowthPolicy">
+            <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+           </property>
+           <property name="verticalSpacing">
+            <number>0</number>
+           </property>
+           <item row="0" column="0">
+            <widget class="QLabel" name="lbDomeDiameter">
+             <property name="text">
+              <string>Dome Diameter</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QDoubleSpinBox" name="boxDomeDiameter">
+             <property name="value">
+              <double>23.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="domeHeightLabel">
+             <property name="text">
+              <string>Distances</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <layout class="QGridLayout" name="gridLayout_3">
+             <property name="verticalSpacing">
+              <number>0</number>
+             </property>
+             <item row="1" column="1">
+              <widget class="QDoubleSpinBox" name="boxCenterEquator">
+               <property name="value">
+                <double>11.500000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_6">
+               <property name="text">
+                <string>Center To Pole</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QDoubleSpinBox" name="boxCenterPole">
+               <property name="value">
+                <double>11.500000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_7">
+               <property name="text">
+                <string>Center To Equator</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="rangeTopLabel">
+             <property name="text">
+              <string>Range Top</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QDoubleSpinBox" name="boxRangeTop">
+             <property name="maximum">
+              <double>1.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.010000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="rangeBottomLabel">
+             <property name="text">
+              <string>Range Bottom</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QDoubleSpinBox" name="boxRangeBottom">
+             <property name="maximum">
+              <double>1.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.010000000000000</double>
+             </property>
+             <property name="value">
+              <double>1.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="grpCyclorama">
+          <property name="title">
+           <string>Cyclorama</string>
+          </property>
+          <layout class="QFormLayout" name="formLayout_4">
+           <property name="fieldGrowthPolicy">
+            <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+           </property>
+           <property name="verticalSpacing">
+            <number>0</number>
+           </property>
+           <item row="0" column="0">
+            <widget class="QLabel" name="diameterLabel">
+             <property name="text">
+              <string>Diameter</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QDoubleSpinBox" name="boxCycloramaDiameter">
+             <property name="value">
+              <double>40.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="heightLabel">
+             <property name="text">
+              <string>Height</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QDoubleSpinBox" name="boxCycloramaHeight">
+             <property name="singleStep">
+              <double>0.000000000000000</double>
+             </property>
+             <property name="value">
+              <double>10.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="lbCycloramaOffset">
+             <property name="text">
+              <string>Offset</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QDoubleSpinBox" name="boxCycloramaOffset"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
     </layout>
    </widget>
-  </widget>
-  <widget class="QToolBar" name="toolBar">
-   <property name="windowTitle">
-    <string>toolBar</string>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
-  <widget class="QToolBar" name="toolBar_2">
-   <property name="windowTitle">
-    <string>toolBar_2</string>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
-  <widget class="QToolBar" name="toolBar_3">
-   <property name="windowTitle">
-    <string>toolBar_3</string>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
   </widget>
  </widget>
  <customwidgets>
@@ -684,6 +892,7 @@
     <slot>setPitchOffset(double)</slot>
     <slot>setDomeInnerDiameter(double)</slot>
     <slot>setBaseOffset(double)</slot>
+    <slot>setDomeHeight(double)</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -708,96 +917,64 @@
   <connection>
    <sender>boxDomeDiameter</sender>
    <signal>valueChanged(double)</signal>
-   <receiver>glWidget</receiver>
-   <slot>setDomeDiameter(double)</slot>
+   <receiver>DomeGUI</receiver>
+   <slot>setDomeSettings()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>183</x>
      <y>218</y>
     </hint>
     <hint type="destinationlabel">
-     <x>617</x>
-     <y>436</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>boxBaseHeight</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>glWidget</receiver>
-   <slot>setBaseHeight(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>183</x>
-     <y>274</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>617</x>
-     <y>436</y>
+     <x>437</x>
+     <y>473</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>boxTowerHeight</sender>
    <signal>valueChanged(double)</signal>
-   <receiver>glWidget</receiver>
-   <slot>setTowerHeight(double)</slot>
+   <receiver>DomeGUI</receiver>
+   <slot>setProjectorSettings(double)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>183</x>
      <y>330</y>
     </hint>
     <hint type="destinationlabel">
-     <x>617</x>
-     <y>436</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>chkShowDome</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>glWidget</receiver>
-   <slot>setShowDome(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>183</x>
-     <y>360</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>617</x>
-     <y>436</y>
+     <x>437</x>
+     <y>473</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>boxAngleOfView</sender>
    <signal>valueChanged(double)</signal>
-   <receiver>glWidget</receiver>
-   <slot>setAngleOfView(double)</slot>
+   <receiver>DomeGUI</receiver>
+   <slot>setProjectorSettings(double)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>183</x>
      <y>450</y>
     </hint>
     <hint type="destinationlabel">
-     <x>617</x>
-     <y>436</y>
+     <x>437</x>
+     <y>473</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>boxAspectRatio</sender>
    <signal>valueChanged(double)</signal>
-   <receiver>glWidget</receiver>
-   <slot>setAspectRatio(double)</slot>
+   <receiver>DomeGUI</receiver>
+   <slot>setDomeSettings(double)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>183</x>
      <y>506</y>
     </hint>
     <hint type="destinationlabel">
-     <x>617</x>
-     <y>436</y>
+     <x>437</x>
+     <y>473</y>
     </hint>
    </hints>
   </connection>
@@ -866,38 +1043,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>boxOffsetX</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>DomeGUI</receiver>
-   <slot>setProjectorSettings(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>136</x>
-     <y>800</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>437</x>
-     <y>453</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>boxOffsetY</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>DomeGUI</receiver>
-   <slot>setProjectorSettings(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>213</x>
-     <y>800</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>437</x>
-     <y>453</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>boxImages</sender>
    <signal>currentIndexChanged(QString)</signal>
    <receiver>glWidget</receiver>
@@ -906,22 +1051,6 @@
     <hint type="sourcelabel">
      <x>267</x>
      <y>104</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>644</x>
-     <y>455</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>boxPatchResolution</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>glWidget</receiver>
-   <slot>setPatchResolution(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>270</x>
-     <y>400</y>
     </hint>
     <hint type="destinationlabel">
      <x>644</x>
@@ -962,66 +1091,18 @@
    </hints>
   </connection>
   <connection>
-   <sender>chkRays</sender>
-   <signal>clicked()</signal>
-   <receiver>DomeGUI</receiver>
-   <slot>setProjectorSettings()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>354</x>
-     <y>431</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>437</x>
-     <y>453</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>chkGrid</sender>
-   <signal>clicked()</signal>
-   <receiver>DomeGUI</receiver>
-   <slot>setProjectorSettings()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>218</x>
-     <y>459</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>437</x>
-     <y>453</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>chkProjPoints</sender>
-   <signal>clicked()</signal>
-   <receiver>DomeGUI</receiver>
-   <slot>setProjectorSettings()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>354</x>
-     <y>459</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>437</x>
-     <y>453</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>chkShowProjectorImages</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>glWidget</receiver>
-   <slot>setShowProjectorImages(bool)</slot>
+   <signal>clicked()</signal>
+   <receiver>DomeGUI</receiver>
+   <slot>setDomeSettings()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>203</x>
      <y>502</y>
     </hint>
     <hint type="destinationlabel">
-     <x>644</x>
-     <y>461</y>
+     <x>437</x>
+     <y>473</y>
     </hint>
    </hints>
   </connection>
@@ -1038,22 +1119,6 @@
     <hint type="destinationlabel">
      <x>644</x>
      <y>461</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>boxYawAngle</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>DomeGUI</receiver>
-   <slot>setProjectorSettings(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>275</x>
-     <y>380</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>437</x>
-     <y>453</y>
     </hint>
    </hints>
   </connection>
@@ -1090,42 +1155,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>boxInnerDiameter</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>glWidget</receiver>
-   <slot>setDomeInnerDiameter(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>272</x>
-     <y>183</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>649</x>
-     <y>461</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>boxBaseOffset</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>glWidget</receiver>
-   <slot>setBaseOffset(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>272</x>
-     <y>249</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>649</x>
-     <y>461</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>chkHighlightProjections</sender>
    <signal>clicked()</signal>
    <receiver>DomeGUI</receiver>
-   <slot>setProjectorSettings()</slot>
+   <slot>setDomeSettings()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>238</x>
@@ -1134,6 +1167,278 @@
     <hint type="destinationlabel">
      <x>437</x>
      <y>453</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>boxRollOffset</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>DomeGUI</receiver>
+   <slot>setProjectorSettings(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>278</x>
+     <y>856</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>437</x>
+     <y>473</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>boxAB</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>DomeGUI</receiver>
+   <slot>setProjectorSettings(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>366</x>
+     <y>415</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>437</x>
+     <y>473</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>boxAC</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>DomeGUI</receiver>
+   <slot>setProjectorSettings()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>366</x>
+     <y>442</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>437</x>
+     <y>473</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>boxACenter</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>DomeGUI</receiver>
+   <slot>setProjectorSettings(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>366</x>
+     <y>334</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>437</x>
+     <y>473</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>boxBCenter</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>DomeGUI</receiver>
+   <slot>setProjectorSettings(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>366</x>
+     <y>361</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>437</x>
+     <y>473</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>boxCCenter</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>DomeGUI</receiver>
+   <slot>setProjectorSettings(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>366</x>
+     <y>388</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>437</x>
+     <y>473</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>boxCenterEquator</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>DomeGUI</receiver>
+   <slot>setDomeSettings()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>365</x>
+     <y>186</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>437</x>
+     <y>473</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>boxCenterPole</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>DomeGUI</receiver>
+   <slot>setDomeSettings()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>365</x>
+     <y>159</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>437</x>
+     <y>473</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chkShowDome</sender>
+   <signal>clicked()</signal>
+   <receiver>DomeGUI</receiver>
+   <slot>setDomeSettings()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>291</x>
+     <y>211</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>437</x>
+     <y>473</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>boxYawAngle</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>DomeGUI</receiver>
+   <slot>setProjectorSettings()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>283</x>
+     <y>524</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>437</x>
+     <y>473</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnDome</sender>
+   <signal>clicked()</signal>
+   <receiver>DomeGUI</receiver>
+   <slot>setCanvasModel()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>263</x>
+     <y>96</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>437</x>
+     <y>536</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnCyclorama</sender>
+   <signal>clicked()</signal>
+   <receiver>DomeGUI</receiver>
+   <slot>setCanvasModel()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>263</x>
+     <y>124</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>437</x>
+     <y>536</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>boxCycloramaDiameter</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>DomeGUI</receiver>
+   <slot>setCycloramaSettings(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>263</x>
+     <y>373</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>312</x>
+     <y>536</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>boxCycloramaHeight</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>DomeGUI</receiver>
+   <slot>setCycloramaSettings(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>263</x>
+     <y>406</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>312</x>
+     <y>536</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>boxCycloramaOffset</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>DomeGUI</receiver>
+   <slot>setCycloramaSettings(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>263</x>
+     <y>439</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>312</x>
+     <y>536</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>boxRangeTop</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>DomeGUI</receiver>
+   <slot>setDomeSettings(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>284</x>
+     <y>337</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>312</x>
+     <y>586</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>boxRangeBottom</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>DomeGUI</receiver>
+   <slot>setDomeSettings(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>284</x>
+     <y>370</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>312</x>
+     <y>586</y>
     </hint>
    </hints>
   </connection>
@@ -1146,5 +1451,9 @@
   <slot>selectProjAll()</slot>
   <slot>setProjectorSettings(double)</slot>
   <slot>setProjectorSettings()</slot>
+  <slot>setDomeSettings()</slot>
+  <slot>setDomeSettings(double)</slot>
+  <slot>setCanvasModel()</slot>
+  <slot>setCycloramaSettings(double)</slot>
  </slots>
 </ui>

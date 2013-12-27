@@ -4,18 +4,14 @@ struct Projector
 {
   float fov;
   float aspect_ratio;
-  float alpha;
-  float gamma;
-  vec3 pos;
+  vec3 offset;
   mat3 matrix;
 };
 
 Projector Projector_construct(
     float fov,
     float aspect_ratio,
-    float alpha,
-    float gamma,
-    vec3 pos,
+    vec3 offset,
     float yaw,
     float pitch,
     float roll)
@@ -23,9 +19,7 @@ Projector Projector_construct(
   Projector proj;
   proj.fov = fov;
   proj.aspect_ratio = aspect_ratio;
-  proj.alpha = alpha;
-  proj.gamma = gamma;
-  proj.pos = pos;
+  proj.offset = offset;
   proj.matrix = rotationMatrix(yaw,pitch,roll);
   return proj;
 }
@@ -39,11 +33,6 @@ void Projector_coordinateSystem(
   look_at = proj.matrix * vec3(1.0,0.0,0.0);
   side = proj.matrix * vec3(0.0,1.0,0.0);
   up = proj.matrix * vec3(0.0,0.0,1.0);
-}
-
-vec4 Projector_color(in Projector proj, in vec4 color)
-{
-  return vec4(pow(color.r,proj.gamma),pow(color.g,proj.gamma),pow(color.b,proj.gamma),proj.alpha); 
 }
 
 struct Frustum
@@ -62,7 +51,7 @@ Frustum Frustum_construct(in Projector proj)
   float a = proj.fov / 2.0;
   float width = tan(deg2rad(a));
   float height = width * proj.aspect_ratio;
-  frustum.eye = proj.pos;
+  frustum.eye = proj.offset;
   frustum.top_left = proj.matrix * vec3(1.0,-width,height);
   frustum.top_right = proj.matrix * vec3(1.0,width,height);
   frustum.bottom_left = proj.matrix * vec3(1.0,-width,-height);
@@ -81,7 +70,7 @@ Frustum Frustum_construct(in Projector proj,
   float a = proj.fov / 2.0;
   float width = tan(deg2rad(a));
   float height = width * proj.aspect_ratio;
-  frustum.eye = proj.pos;
+  frustum.eye = proj.offset;
   frustum.top_left = proj.matrix * vec3(1.0,-width + squeezeLeft,height - squeezeBottom);
   frustum.top_right = proj.matrix * vec3(1.0,width - squeezeRight,height - squeezeBottom);
   frustum.bottom_left = proj.matrix * vec3(1.0,-width + squeezeLeft,-height + squeezeTop);
@@ -126,47 +115,9 @@ float Frustum_intersection(in Frustum frustum, in vec3 point)
 /// Calculate point on projector screen by given screen coordinates
 vec3 Frustum_pointOnScreen(in Frustum frustum, in vec2 screenCoord)
 {
-  return interpolate(screenCoord.y,
-                     interpolate(screenCoord.x,frustum.top_left,frustum.top_right),
-                     interpolate(screenCoord.x,frustum.bottom_left,frustum.bottom_right));
+  return mix(mix(frustum.top_left,frustum.top_right,screenCoord.x),
+             mix(frustum.bottom_left,frustum.bottom_right,screenCoord.x),screenCoord.y);
 }
-
-/*
-mat3 calcInverse(mat3 m)
-{
-  mat3 result;
-float determinant =    +m[0][0]*(m[1][1]*m[2][2]-m[2][1]*m[1][2])
-                        -m[0][1]*(m[1][0]*m[2][2]-m[1][2]*m[2][0])
-                        +m[0][2]*(m[1][0]*m[2][1]-m[1][1]*m[2][0]);
-float invdet = 1.0/determinant;
-result[0][0] =  (m[1][1]*m[2][2]-m[2][1]*m[1][2])*invdet;
-result[1][0] = -(m[0][1]*m[2][2]-m[0][2]*m[2][1])*invdet;
-result[2][0] =  (m[0][1]*m[1][2]-m[0][2]*m[1][1])*invdet;
-result[0][1] = -(m[1][0]*m[2][2]-m[1][2]*m[2][0])*invdet;
-result[1][1] =  (m[0][0]*m[2][2]-m[0][2]*m[2][0])*invdet;
-result[2][1] = -(m[0][0]*m[1][2]-m[1][0]*m[0][2])*invdet;
-result[0][2] =  (m[1][0]*m[2][1]-m[2][0]*m[1][1])*invdet;
-result[1][2] = -(m[0][0]*m[2][1]-m[2][0]*m[0][1])*invdet;
-result[2][2] =  (m[0][0]*m[1][1]-m[1][0]*m[0][1])*invdet;
-  return result;
-}
-
-vec2 Projector_project(in Projector proj, in vec3 point)
-{
-  mat3 inverseM = calcInverse(proj.matrix);
-  vec3 o = (point - proj.pos) * inverseM;
-  float a = proj.fov / 2.0;
-  float width = tan(deg2rad(a));
-  float height = width * proj.aspect_ratio;
-  vec2 projected = o.yz + vec2(width,height);
-  return vec2(projected.x / (width * 2.0), projected.y / (height * 2.0));
-}
-
-float pointInScreen(vec2 p)
-{
-  return ((p.x >= 0.0) && (p.x <= 1.0) && 
-          (p.y >= 0.0) && (p.y <= 1.0)) ? 1.0 : -1.0;
-}*/
 
 Ray Frustum_ray(in Frustum frustum, in vec2 screenCoord)
 {

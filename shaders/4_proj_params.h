@@ -1,3 +1,4 @@
+#include "projection.h"
 
 uniform float proj_fov; // 68.2 is default
 uniform float proj_aspect_ratio; // 0.75 is default
@@ -6,7 +7,6 @@ uniform float tower_height;
 uniform float pitch_angle;
 
 /// Projector measurements
-
 uniform float a_distance_center;
 uniform float b_distance_center;
 uniform float c_distance_center;
@@ -46,6 +46,13 @@ uniform float b_alpha;
 uniform float c_alpha;
 uniform float d_alpha;
 
+uniform float a_gamma;
+uniform float b_gamma;
+uniform float c_gamma;
+uniform float d_gamma;
+
+uniform float selected_proj;
+
 Projector ProjectorA_construct()
 {
   vec3 pos = vec3(a_shift,-a_distance_center,-a_delta_height - tower_height);
@@ -53,8 +60,9 @@ Projector ProjectorA_construct()
     proj_fov,
     proj_aspect_ratio,
     a_alpha,
+    a_gamma,
     pos,
-    a_delta_yaw,
+    -90.0 + a_delta_yaw,
     a_delta_pitch + pitch_angle,
     a_roll);
 }
@@ -67,8 +75,9 @@ Projector ProjectorB_construct()
     proj_fov,
     proj_aspect_ratio,
     b_alpha,
+    b_gamma,
     pos,
-    90.0 + b_delta_yaw,
+    -180.0 + b_delta_yaw,
     b_delta_pitch + pitch_angle,
     b_roll);
 }
@@ -80,30 +89,40 @@ Projector ProjectorC_construct()
     proj_fov,
     proj_aspect_ratio,
     c_alpha,
+    c_gamma,
     pos,
-    180.0 + c_delta_yaw,
+    -270.0 + c_delta_yaw,
     c_delta_pitch + pitch_angle,
     c_roll);
 }
 
 Projector ProjectorD_construct()
 {
-  vec3 pos = vec3(d_shift,d_distance_center,-d_delta_height - tower_height);
+  vec3 pos = vec3(-d_distance_center,d_shift,-d_delta_height - tower_height);
   return Projector_construct(
     proj_fov,
     proj_aspect_ratio,
     d_alpha,
+    d_gamma,
     pos,
-    270.0 + d_delta_yaw,
+    -360.0 + d_delta_yaw,
     d_delta_pitch + pitch_angle,
     d_roll);
 }
 
-vec2 constructFromCoords(in vec2 coord, out Projector proj)
+Ray constructFromCoords(in vec2 coord, out Projector proj)
 {
   vec2 outCoord = coord;
-  outCoord.x *= 4.0;
-  int idx = int(floor(outCoord.x));
+  int idx = 0;
+  if (selected_proj < 0.0)
+  {
+    outCoord.x *= 4.0;
+    idx = int(floor(outCoord.x));
+  } else
+  {
+    idx = int(selected_proj);
+  }
+  
 /// Projector A
   if (idx == 0)
   {
@@ -125,5 +144,7 @@ vec2 constructFromCoords(in vec2 coord, out Projector proj)
   }
 
   outCoord.x = 1.0 - fract(outCoord.x);
-  return outCoord;
+  Frustum f = Frustum_construct(proj);
+  Ray ray = Frustum_ray(f,outCoord);
+  return ray;
 }

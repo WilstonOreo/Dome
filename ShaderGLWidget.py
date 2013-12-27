@@ -63,6 +63,7 @@ class ShaderGLWidget(QGLWidget):
       self.startTime = float(time.time())
 
     def loadUniformFile(self):
+      if not self.uniformFile: return
       f = open(self.uniformFile,'r')
       self.uniforms = []
       for line in f:
@@ -70,6 +71,7 @@ class ShaderGLWidget(QGLWidget):
       self.lastUniformEdit = os.stat(self.uniformFile).st_mtime
     
     def loadTextureFile(self):
+      if not self.textureFile: return
       f = open(self.textureFile,'r')
       self.textures = []
       

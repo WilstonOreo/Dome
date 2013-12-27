@@ -12,11 +12,12 @@
 // goo by cln
 // mindless tweaking by skwosh
 
+#include "fisheye.h"
+
 #ifdef GL_ES
 precision highp float;
 #endif
 
-#include "fisheye.h"
 
 uniform float time;
 uniform vec2 mouse;

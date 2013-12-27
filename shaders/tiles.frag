@@ -100,7 +100,7 @@ void main(void){
   vec3 scrCoord=vcv+vPos.x*u*resolution.x/resolution.y+vPos.y*v;
   vec3 scp = normalize(scrCoord-prp);
 
-  if (fisheye_direction(gl_FragCoord.xy,resolution,PI*0.5+cameraAngles.x,cameraAngles.y+sin(time*0.05),cameraAngles.z+time*0.1,scp) < 0.0)
+  if (fisheye_direction(gl_FragCoord.xy,resolution,PI*0.5+cameraAngles.x,cameraAngles.y,cameraAngles.z,scp) < 0.0)
   {
     gl_FragColor = vec4(0.0,0.0,0.0, 1.0);
     return;

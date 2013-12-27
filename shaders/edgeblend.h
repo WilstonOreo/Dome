@@ -1,80 +1,91 @@
-uniform float a_top; // 0.05
-uniform float a_left_side; // 0.05
-uniform float a_right_side; // 0.05
-uniform float a_edge_gamma; // 1.0
-uniform float b_top; // 0.05
-uniform float b_left_side; // 0.05
-uniform float b_right_side; // 0.05
-uniform float b_edge_gamma; // 1.0
-uniform float c_top; // 0.05
-uniform float c_left_side; // 0.05
-uniform float c_right_side; // 0.05
-uniform float c_edge_gamma; // 1.0
 
-/// All zero initially
-uniform float b_a_edge_offset; // 0.00
-uniform float b_a_edge_blur; 
-uniform float b_a_squeeze_left;
-uniform float b_a_squeeze_right;
-uniform float b_a_squeeze_top;
-uniform float b_a_squeeze_bottom;
-uniform float c_a_edge_offset; // 0.00
-uniform float c_a_edge_blur; // 0.05
-uniform float c_a_squeeze_left;
-uniform float c_a_squeeze_right;
-uniform float c_a_squeeze_top;
-uniform float c_a_squeeze_bottom;
-uniform float c_b_edge_offset; // 0.00
-uniform float c_b_edge_blur; // 0.05
-uniform float c_b_squeeze_left;
-uniform float c_b_squeeze_right;
-uniform float c_b_squeeze_top;
-uniform float c_b_squeeze_bottom;
+uniform float overlap_proj_fov; // 68.2 is default
+uniform float overlap_proj_aspect_ratio; // 0.75 is default
+uniform float overlap_proj_distance_center;
+uniform float overlap_proj_shift;
+uniform float overlap_proj_tower_height;
 
-uniform float mask; // between 0.0 and 1.0
-uniform float smart_edge; // <0.0 = off, >=0.0 on
+/// Range from -90.0 to 90.0
+uniform float overlap_proj_yaw;
+uniform float overlap_proj_delta_yaw;
+uniform float overlap_proj_pitch;
+uniform float overlap_proj_roll;
 
-struct Edgeblend
+uniform float overlap_squeeze_left;
+uniform float overlap_squeeze_right;
+uniform float overlap_squeeze_top;
+uniform float overlap_squeeze_bottom;
+uniform float overlap_edge_offset;
+
+uniform float top;
+uniform float left;
+uniform float right;
+uniform float edge_blur;
+uniform float mask;
+uniform float gamma;
+
+Projector overlap_proj;
+
+void overlap_proj_params()
 {
-  float top, left_side, right_side, gamma;
-};
+  float yaw = overlap_proj_yaw;
+  float theta = deg2rad(yaw);
+  vec2 p = overlap_proj_distance_center*vec2(-cos(theta),sin(theta));
+  float ct = cos(theta), st = sin(theta);
+  vec2 shiftVec = normalize(vec2(st,ct)) * overlap_proj_shift;  
+  vec3 pos =  vec3(p + shiftVec,- overlap_proj_tower_height);
+  overlap_proj = Projector_construct(
+      overlap_proj_fov,
+      overlap_proj_aspect_ratio,
+      pos,
+      overlap_proj_delta_yaw + yaw,
+      overlap_proj_pitch,
+      overlap_proj_roll);
+}
 
-Edgeblend Edgeblend_construct(
-    float top,
-    float left_side,
-    float right_side,
-    float gamma)
+Frustum overlap_proj_frustum()
 {
-  Edgeblend edgeblend;
-  edgeblend.top = top;
-  edgeblend.left_side = left_side;
-  edgeblend.right_side = right_side;
-  edgeblend.gamma = gamma;
-  return edgeblend;
-} 
+  return Frustum_construct(overlap_proj,overlap_squeeze_left,overlap_squeeze_right,overlap_squeeze_top,overlap_squeeze_bottom);
+}
 
-float Edgeblend_edgeValue(in Edgeblend edgeblend, in vec2 coord)
+float edgeblend_border(in vec2 coord)
 {
   float edgeValue = 1.0;
 
-  if (coord.x <= edgeblend.left_side)
+  if (coord.x <= left)
   {
-    edgeValue *= min(coord.x / edgeblend.left_side, 1.0);
+    edgeValue *= min(coord.x / left, 1.0);
   } else
-  if (coord.x >= 1.0 - edgeblend.right_side)
+  if (coord.x >= 1.0 - right)
   {
-    edgeValue *= min((1.0 - coord.x) / edgeblend.right_side, 1.0);
+    edgeValue *= min((1.0 - coord.x) / right, 1.0);
   }
-  if (1.0 - coord.y <= edgeblend.top)
+  if (1.0 - coord.y <= top)
   {
-    edgeValue *= min((1.0 - coord.y) / edgeblend.top, 1.0);
+    edgeValue *= min((1.0 - coord.y) / top, 1.0);
   }
-  return 1.0 - pow(clamp(edgeValue,0.0,1.0),edgeblend.gamma);
+  return 1.0 - pow(clamp(edgeValue,0.0,1.0),gamma);
 }
 
-vec4 Edgeblend_color(in Edgeblend edgeblend, in float value)
+vec4 edgeblend_color(in float value)
 {
-  float mv = mask*value;
-  return vec4(mv,mv,mv,mask + value); 
+  float v = clamp(value,0.0,1.0);
+  if (mask < 0.0)
+  {
+  	return vec4(0.0,0.0,0.0,v); 
+  }
+  float mv = 1.0 - v;  
+  return vec4(mv,mv,mv,1.0); 
+}
+
+float edgeblend_frustum(in vec3 iPoint, float diameter)
+{
+  float edgeOffset = overlap_edge_offset + 0.5 * edge_blur;
+  overlap_proj_params();
+  Frustum frustum = overlap_proj_frustum();
+
+  float frustumIntersection = (Frustum_intersection(frustum,iPoint,edgeOffset*diameter) / diameter + edgeOffset) / edge_blur;
+  
+  return pow(clamp(frustumIntersection,0.0,1.0),gamma);
 }
 

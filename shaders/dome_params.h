@@ -1,20 +1,17 @@
-#include "spherical.h"
 
 /// Those are known, should NOT be changed
 uniform float dome_diameter;
-uniform float proj_yaw; // Any value allowed
-uniform float proj_mode; // Above 0.0 > fish eye, below < 0.0 spherical projection
+uniform float dome_distance_center_pole; 
+uniform float dome_distance_center_equator; 
 //uniform float dome_z_offset;
 
 //// Those need to be measured
 /// Dome measurements
 /// If dome is a half sphere, there are equal to dome_diameter / 2.0
 /// Range from 0.0 to 30.0
-uniform float distance_center_pole; 
-uniform float distance_center_equator; 
   
-uniform float strip_top; // 0.0
-uniform float strip_bottom; // 1.0
+uniform float map_strip_top; // 0.0
+uniform float map_strip_bottom; // 1.0
 
 
 struct Dome

@@ -20,25 +20,22 @@
     me@wilstonoreo.net
 **************************************************************************/
 
-/// Our texture
-uniform sampler2D proj_texture;
-
-#include "4_proj_params.h"
-#include "dome_params.h"
+#include "canvas.h"
+#include "mapping.h"
 
 void main()
 {
-  Projector proj;
-  Ray ray = constructFromCoords(gl_TexCoord[0].st,proj);
-  Dome dome = Dome_construct();
-
-  vec2 texCoords;
-  if (Dome_texCoords(dome,ray,texCoords) < 1.0) 
+  gl_FragColor = vec4(0.0,0.0,0.0,1.0);
+  if (canvas_params(gl_TexCoord[0].st) < 0.0)
   {
-    gl_FragColor = vec4(0.0,0.0,0.0,0.0);
+    return;
+  }
+  vec2 texCoords;
+  if (mapping(texCoords) < 0.0)
+  {
     return;
   }
 
-  gl_FragColor = Projector_color(proj,texture2D(proj_texture, texCoords)); 
+  gl_FragColor = texture2D(map_texture, texCoords); 
 }
 
